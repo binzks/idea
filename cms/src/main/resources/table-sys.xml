@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="table">
+    <tables>
+        <table name="think_sys_module" comment="系统模块" ds="think" pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="name" comment="名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="parentid" comment="父id" type="int" size="11"></field>
+                <field name="type" comment="类型 0-模块组 1-模块" type="int" size="11"
+                       isnull="false"></field>
+                <field name="url" comment="链接" type="varchar" size="255"></field>
+                <field name="viewcode" comment="View编号" type="varchar" size="50"></field>
+                <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
+                       isnull="false"></field>
+                <field name="icon" comment="图标" type="varchar" size="50"></field>
+                <field name="order" comment="排序" type="int" size="11" isnull="true"></field>
+                <field name="remark" comment="备注" type="varchar" size="255"></field>
+            </fields>
+            <indexes>
+                <index name="index_name" type="UNIQUE" comment="名称唯一索引"
+                       fields="name"></index>
+            </indexes>
+            <datas>
+                <data id="1" name="系统设置" parentid="0" type="0" url="" viewcode=""
+                      status="1" icon="icon-list" order="1" remark=""></data>
+                <data id="2" name="权限" parentid="0" type="0" url="" viewcode=""
+                      status="1" icon="icon-list" order="0" remark=""></data>
+                <data id="3" name="模块管理" parentid="2" type="1" url="/tpl/list3"
+                      viewcode="view_sys_module" status="1" icon="icon-list" order="1"
+                      remark=""></data>
+                <data id="4" name="角色管理" parentid="2" type="1" url="/tpl/list4"
+                      viewcode="view_sys_role" status="1" icon="icon-list" order="2"
+                      remark=""></data>
+                <data id="5" name="系统用户" parentid="2" type="1" url="/tpl/list5"
+                      viewcode="view_sys_user" status="1" icon="icon-list" order="3"
+                      remark=""></data>
+                <data id="6" name="个人信息" parentid="1" type="1" url="/tpl/list6"
+                      viewcode="view_sys_user_info" status="1" icon="icon-list" order="1"
+                      remark=""></data>
+                <data id="7" name="工作流管理" parentid="2" type="1" url="/tpl/list7"
+                      viewcode="view_sys_workflow" status="1" icon="icon-list" order="4"
+                      remark=""></data>
+                <data id="8" name="节点管理" parentid="2" type="1" url="/tpl/list8"
+                      viewcode="view_sys_workflow_step" status="1" icon="icon-list"
+                      order="5" remark=""></data>
+                <data id="9" name="资讯" parentid="0" type="0" url="" viewcode=""
+                      status="1" icon="icon-list" order="0" remark=""></data>
+                <data id="10" name="资讯栏目" parentid="9" type="1" url="/tpl/list10"
+                      viewcode="view_news_type" status="1" icon="icon-list" order="5"
+                      remark=""></data>
+            </datas>
+        </table>
+        <table name="think_sys_role" comment="系统用户角色" ds="think" pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="code" comment="编号" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="name" comment="名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="moduleids" comment="模块列表" type="varchar" size="255"></field>
+                <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
+                       isnull="false"></field>
+                <field name="modifytime" comment="修改时间" type="varchar" size="20"></field>
+                <field name="remark" comment="备注" type="varchar" size="255"></field>
+            </fields>
+            <indexes>
+                <index name="index_code" type="UNIQUE" comment="编号唯一索引"
+                       fields="`code`"></index>
+            </indexes>
+            <datas>
+                <data id="1" code="root" name="初始化管理员" moduleids=",1,2,3,4,5,6,7,8,9,10,"
+                      status="1"></data>
+            </datas>
+        </table>
+        <table name="think_sys_role_action" comment="角色操作权限" ds="think"
+               pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="parentid" comment="角色表id" type="int" size="11"
+                       isnull="false"></field>
+                <field name="moduleid" comment="模块表id" type="int" size="11"
+                       isnull="false"></field>
+                <field name="value" comment="操作名称" type="varchar" size="50"></field>
+            </fields>
+            <indexes>
+                <index name="index_parentid" type="INDEX" comment="parentid索引"
+                       fields="parentid"></index>
+            </indexes>
+        </table>
+        <table name="think_sys_role_column" comment="角色列权限" ds="think"
+               pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="parentid" comment="角色表id" type="int" size="11"
+                       isnull="false"></field>
+                <field name="moduleid" comment="模块表id" type="int" size="11"
+                       isnull="false"></field>
+                <field name="value" comment="列名称" type="varchar" size="50"></field>
+            </fields>
+            <indexes>
+                <index name="index_parentid" type="INDEX" comment="parentid索引"
+                       fields="parentid"></index>
+            </indexes>
+        </table>
+        <table name="think_sys_user" comment="系统用户" ds="think" pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="code" comment="编号" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="name" comment="名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="password" comment="密码" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="phone" comment="手机号码" type="varchar" size="50"></field>
+                <field name="email" comment="邮箱" type="varchar" size="100"></field>
+                <field name="roleid" comment="角色id" type="int" size="11"></field>
+                <field name="lasttime" comment="最后登录时间" type="bigint" size="20"></field>
+                <field name="lastip" comment="最后登录ip" type="varchar" size="50"></field>
+                <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
+                       isnull="false"></field>
+                <field name="modifytime" comment="修改时间" type="bigint" size="20"></field>
+                <field name="remark" comment="备注" type="varchar" size="255"></field>
+            </fields>
+            <indexes>
+                <index name="index_code" type="UNIQUE" comment="编号唯一索引"
+                       fields="code"></index>
+            </indexes>
+            <datas>
+                <data id="1" code="root" name="超级管理员"
+                      password="4ad418256efdfae2d275a9d6a8631df8" roleid="1" status="1"></data>
+            </datas>
+        </table>
+        <table name="think_sys_user_rowfilter" comment="用户行级过滤" ds="think"
+               pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="parentid" comment="用户id" type="int" size="11"
+                       isnull="false"></field>
+                <field name="moduleid" comment="模块表id" type="int" size="11"
+                       isnull="false"></field>
+                <field name="column" comment="列名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="value" comment="过滤值" type="varchar" size="255"
+                       isnull="false"></field>
+            </fields>
+            <indexes>
+                <index name="index_parentid" type="INDEX" comment="parentid索引"
+                       fields="parentid"></index>
+            </indexes>
+        </table>
+        <table name="think_sys_cms_del_backup" comment="删除数据备份表" ds="think_log"
+               pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="mid" comment="模块id" type="varchar" size="50"></field>
+                <field name="view" comment="View" type="varchar" size="50"></field>
+                <field name="table" comment="数据库表名" type="varchar" size="50"></field>
+                <field name="createtime" comment="创建时间" type="bigint" size="20"></field>
+                <field name="data" comment="删除的数据" type="text"></field>
+            </fields>
+        </table>
+        <table name="think_sys_cms_log" comment="CMS访问日志" ds="think_log"
+               pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="ipaddr" comment="ip地址" type="varchar" size="50"></field>
+                <field name="userid" comment="操作人id" type="varchar" size="50"></field>
+                <field name="createtime" comment="创建时间" type="bigint" size="20"></field>
+                <field name="action" comment="操作" type="varchar" size="50"></field>
+            </fields>
+        </table>
+        <table name="think_sys_server_log" comment="服务日志" ds="think_log"
+               pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="ipaddr" comment="ip地址" type="varchar" size="50"></field>
+                <field name="partner" comment="合作方编号" type="varchar" size="50"></field>
+                <field name="version" comment="合作方版本号" type="varchar" size="50"></field>
+                <field name="sid" comment="请求接口id" type="varchar" size="50"></field>
+                <field name="reqstring" comment="原始请求字符串" type="varchar" size="255"></field>
+                <field name="starttime" comment="请求开始时间" type="bigint" size="20"></field>
+                <field name="decryptreq" comment="解密后请求字符串" type="varchar"
+                       size="255"></field>
+                <field name="proccesstime" comment="业务处理时间(毫秒)" type="bigint"
+                       size="20"></field>
+                <field name="errorcode" comment="请求返回编号" type="varchar" size="50"></field>
+                <field name="errormsg" comment="请求返回信息" type="varchar" size="255"></field>
+                <field name="resultdata" comment="处理结果" type="text"></field>
+                <field name="createtime" comment="日志创建时间" type="bigint" size="20"></field>
+            </fields>
+        </table>
+        <table name="think_sys_platform" comment="平台" ds="think" pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="code" comment="编号" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="name" comment="名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
+                       isnull="false"></field>
+            </fields>
+            <indexes>
+                <index name="index_code" type="UNIQUE" comment="编号唯一索引"
+                       fields="code"></index>
+            </indexes>
+            <datas>
+                <data id="1" code="ios" name="苹果客户端" status="1"></data>
+                <data id="2" code="android" name="安卓客户端" status="1"></data>
+                <data id="3" code="web" name="网站" status="1"></data>
+            </datas>
+        </table>
+    </tables>
+</root>
