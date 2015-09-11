@@ -1,7 +1,5 @@
 package com.idea.framework.jdbc.support.model;
 
-import com.idea.framework.jdbc.support.NotSupportOrderTypeException;
-
 /**
  * Created by zhoubin on 15/9/10.
  * 排序类型
@@ -30,7 +28,7 @@ public enum OrderType {
             case "DESC":
                 return OrderType.Desc;
             default:
-                throw new NotSupportOrderTypeException("不支持的排序类型[" + name + "]");
+                throw new RuntimeException("不支持的排序类型[" + name + "]");
         }
     }
 }

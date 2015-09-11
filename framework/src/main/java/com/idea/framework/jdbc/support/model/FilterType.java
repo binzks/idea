@@ -1,7 +1,5 @@
 package com.idea.framework.jdbc.support.model;
 
-import com.idea.framework.jdbc.support.NotSupportFilterTypeException;
-
 /**
  * Created by zhoubin on 15/9/10.
  * 查询过滤类型
@@ -77,7 +75,7 @@ public enum FilterType {
             case "<=":
                 return FilterType.Le;
             default:
-                throw new NotSupportFilterTypeException("不支持的查询过滤类型[" + name + "]");
+                throw new RuntimeException("不支持的查询过滤类型[" + name + "]");
         }
     }
 }

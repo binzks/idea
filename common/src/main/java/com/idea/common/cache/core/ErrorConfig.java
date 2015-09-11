@@ -1,10 +1,8 @@
-package com.idea.cache.core;
+package com.idea.common.cache.core;
 
 import com.google.gson.Gson;
-import com.idea.cache.ErrorCache;
-import com.idea.cache.support.Config;
-import com.idea.cache.support.RepeatDefinitionException;
-import com.sun.javafx.collections.MappingChange;
+import com.idea.common.cache.ErrorCache;
+import com.idea.common.cache.support.Config;
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
 
@@ -32,7 +30,7 @@ public class ErrorConfig implements Config {
             Element element = (Element) i.next();
             String code = element.attributeValue("code");
             if (null != errorCache.get(code)) {
-                throw new RepeatDefinitionException("error[" + code + "]已存在重复名称");
+                throw new RuntimeException("error[" + code + "]已存在重复名称");
             }
             String message = element.attributeValue("message");
             map.put(code, message);

@@ -1,9 +1,8 @@
-package com.idea.cache.core;
+package com.idea.common.cache.core;
 
 import com.google.gson.Gson;
-import com.idea.cache.TableCache;
-import com.idea.cache.support.Config;
-import com.idea.cache.support.RepeatDefinitionException;
+import com.idea.common.cache.TableCache;
+import com.idea.common.cache.support.Config;
 import com.idea.framework.jdbc.support.DataBaseType;
 import com.idea.framework.jdbc.support.table.Field;
 import com.idea.framework.jdbc.support.table.Index;
@@ -49,7 +48,7 @@ public class TableConfig implements Config {
             table.setIndexes(indexes);
             table.setData(data);
             if (null != tableCache.get(name)) {
-                throw new RepeatDefinitionException("table[" + name + "]已存在重复名称");
+                throw new RuntimeException("table[" + name + "]已存在重复名称");
             }
             list.add(table);
         }

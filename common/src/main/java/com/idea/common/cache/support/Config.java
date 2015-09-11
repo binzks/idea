@@ -1,4 +1,4 @@
-package com.idea.cache.support;
+package com.idea.common.cache.support;
 
 import org.dom4j.Element;
 

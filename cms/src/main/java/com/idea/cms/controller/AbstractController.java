@@ -165,9 +165,9 @@ public abstract class AbstractController extends BaseController {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
-            if (view.getBackupOnDel()) {
-                backUpDelData(view, mid, id);
-            }
+//            if (view.getBackupOnDel()) {
+//                backUpDelData(view, mid, id);
+//            }
             //	view.deleteById(id);
             return "redirect:" + this.getClass().getAnnotation(RequestMapping.class).value()[0] + "/list" + mid
                     + ".html";

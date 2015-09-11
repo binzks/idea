@@ -1,9 +1,10 @@
-package com.idea.cache.support;
+package com.idea.common.cache.support;
 
-import com.idea.cache.core.ErrorConfig;
-import com.idea.cache.core.ParamConfig;
-import com.idea.cache.core.TableConfig;
-import com.idea.cache.core.ModelConfig;
+
+import com.idea.common.cache.core.ErrorConfig;
+import com.idea.common.cache.core.ModelConfig;
+import com.idea.common.cache.core.ParamConfig;
+import com.idea.common.cache.core.TableConfig;
 
 /**
  * Created by zhoubin on 15/9/9.
@@ -27,7 +28,7 @@ public class ConfigFactory {
             case Table:
                 return new TableConfig();
             default:
-                throw new NotSupportConfigTypeException("不支持的配置类型[" + configType + "]");
+                throw new RuntimeException("不支持的配置类型[" + configType + "]");
         }
     }
 }

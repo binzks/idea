@@ -36,7 +36,7 @@ public enum DataBaseType {
             case "ORACLE":
                 return DataBaseType.Oracle;
             default:
-                throw new NotSupportDataBaseTypeException("不支持的数据库类型[" + name + "]");
+                throw new RuntimeException("不支持的数据库类型[" + name + "]");
         }
     }
 }

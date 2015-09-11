@@ -1,4 +1,4 @@
-package com.idea.cache.support;
+package com.idea.common.cache.support;
 
 /**
  * Created by zhoubin on 15/9/9.
@@ -38,7 +38,7 @@ public enum ConfigType {
             case "TABLE":
                 return ConfigType.Table;
             default:
-                throw new NotSupportConfigTypeException("不支持的配置类型[" + name + "]");
+                throw new RuntimeException("不支持的配置类型[" + name + "]");
         }
     }
 }

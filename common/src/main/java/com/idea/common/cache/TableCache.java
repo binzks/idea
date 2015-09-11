@@ -1,9 +1,7 @@
-package com.idea.cache;
+package com.idea.common.cache;
 
 import com.idea.framework.jdbc.TableFactory;
-import com.idea.framework.jdbc.support.DataBaseType;
 import com.idea.framework.jdbc.support.JdbcTable;
-import com.idea.framework.jdbc.support.NotSupportDataBaseTypeException;
 import com.idea.framework.jdbc.support.table.Table;
 
 import java.util.HashMap;

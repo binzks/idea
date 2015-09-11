@@ -9,7 +9,6 @@
         <module>framework</module>
         <module>cms</module>
         <module>service</module>
-        <module>cache</module>
         <module>common</module>
     </modules>
     <packaging>pom</packaging>

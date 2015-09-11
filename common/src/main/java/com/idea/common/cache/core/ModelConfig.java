@@ -1,19 +1,16 @@
-package com.idea.cache.core;
+package com.idea.common.cache.core;
 
 import com.google.gson.Gson;
-import com.idea.cache.ModelCache;
-import com.idea.cache.support.Config;
+import com.idea.common.cache.ModelCache;
+import com.idea.common.cache.support.Config;
 import com.idea.framework.jdbc.support.DataBaseType;
 import com.idea.framework.jdbc.support.model.*;
-import com.idea.framework.jdbc.support.table.Field;
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 /**
  * Created by zhoubin on 15/9/9.
  */

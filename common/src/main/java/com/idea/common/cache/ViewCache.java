@@ -1,4 +1,4 @@
-package com.idea.cache;
+package com.idea.common.cache;
 
 import com.idea.common.view.View;
 

@@ -3,7 +3,6 @@ package com.idea.framework.jdbc;
 import com.idea.framework.jdbc.core.model.MysqlModel;
 import com.idea.framework.jdbc.support.DataBaseType;
 import com.idea.framework.jdbc.support.JdbcModel;
-import com.idea.framework.jdbc.support.NotSupportDataBaseTypeException;
 import com.idea.framework.jdbc.support.model.Model;
 
 /**
@@ -23,7 +22,7 @@ public class ModelFactory {
         if (model.getDataBaseType() == DataBaseType.Mysql) {
             jdbcModel = new MysqlModel();
         } else {
-            throw new NotSupportDataBaseTypeException("不支持的数据库类型[" + model.getDataBaseType().toString() + "]");
+            throw new RuntimeException("不支持的数据库类型[" + model.getDataBaseType().toString() + "]");
         }
         jdbcModel.setModel(model);
         return jdbcModel;

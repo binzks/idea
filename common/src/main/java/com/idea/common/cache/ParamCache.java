@@ -1,4 +1,4 @@
-package com.idea.cache;
+package com.idea.common.cache;
 
 import org.apache.commons.lang.StringUtils;
 

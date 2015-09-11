@@ -1,8 +1,7 @@
-package com.idea.cache.core;
+package com.idea.common.cache.core;
 
-import com.idea.cache.support.Config;
-import com.idea.cache.support.ConfigFactory;
-import com.idea.cache.support.ConfigType;
+import com.idea.common.cache.support.Config;
+import com.idea.common.cache.support.ConfigFactory;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -32,7 +31,7 @@ public class Configuration {
                     Element root = reader.read(file).getRootElement();
                     String type = root.attributeValue("type");
                     if (StringUtils.isNotBlank(type)) {
-                        Config config = ConfigFactory.getConfig(ConfigType.valueOfString(type));
+                        Config config = ConfigFactory.getConfig(com.idea.common.cache.support.ConfigType.valueOfString(type));
                         if (null != config) {
                             config.init(root);
                         }

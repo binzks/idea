@@ -1,7 +1,6 @@
 package com.idea.common.view;
 
 import java.util.List;
-import java.util.Map;
 
 
 public class View {
@@ -10,50 +9,64 @@ public class View {
     private String pkName; //对应主表主键名称
     private String title; // 标题
     private Integer rowSize;// 每页行数
-    //private Model model;
-    private Boolean backupOnDel; // 删除的时候备份数据
-    private String workflow; // 工作流
+    private String modelName; //model的名称
 
-    private List<ViewColumn> columns;
-    private List<ViewAction> actions;
-
-    public View(String name, String title, Integer rowSize, Boolean backupOnDel,
-                String workflow, List<ViewColumn> columns, List<ViewAction> actions) {
-        this.name = name;
-        this.title = title;
-        this.rowSize = rowSize;
-        //this.model = model;
-        this.backupOnDel = backupOnDel;
-        this.workflow = workflow;
-        this.columns = columns;
-        this.actions = actions;
-    }
+    private List<ViewColumn> columns;  //view的列
+    private List<ViewAction> actions;  //view的操作
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPkName() {
+        return pkName;
+    }
+
+    public void setPkName(String pkName) {
+        this.pkName = pkName;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Integer getRowSize() {
         return rowSize;
     }
 
-    public Boolean getBackupOnDel() {
-        return backupOnDel;
+    public void setRowSize(Integer rowSize) {
+        this.rowSize = rowSize;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
     public List<ViewColumn> getColumns() {
         return columns;
     }
 
+    public void setColumns(List<ViewColumn> columns) {
+        this.columns = columns;
+    }
+
     public List<ViewAction> getActions() {
         return actions;
     }
 
-    public String getPkName() {
-        return pkName;
+    public void setActions(List<ViewAction> actions) {
+        this.actions = actions;
     }
 }
