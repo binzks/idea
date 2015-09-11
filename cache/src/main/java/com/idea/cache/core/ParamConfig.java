@@ -25,14 +25,15 @@ public class ParamConfig implements Config {
         }
         ParamCache paramCache = ParamCache.getInstance();
         Map<String, String> map = new HashMap<>();
-        for (Iterator i = root.elementIterator(); i.hasNext(); ) {
+        Element params = root.element("params");
+        for (Iterator i = params.elementIterator(); i.hasNext(); ) {
             Element element = (Element) i.next();
-            String code = element.attributeValue("code");
-            if (null != paramCache.get(code)) {
-                throw new RepeatDefinitionException("param[" + code + "]已存在重复名称");
+            String key = element.attributeValue("key");
+            if (null != paramCache.get(key)) {
+                throw new RepeatDefinitionException("param[" + key + "]已存在重复名称");
             }
-            String message = element.attributeValue("message");
-            map.put(code, message);
+            String message = element.attributeValue("value");
+            map.put(key, message);
         }
         paramCache.init(map);
         logger.debug("加载Param配置：" + new Gson().toJson(map));

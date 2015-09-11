@@ -15,16 +15,15 @@ public class ModelFactory {
     /***
      * 获取数据model对象，根据数据库类型获取对应对象，用于数据增、删、改、查
      *
-     * @param dataBaseType 数据库类型
-     * @param model        数据model定义
+     * @param model 数据model定义
      * @return 数据model对象
      */
-    public static JdbcModel getModel(DataBaseType dataBaseType, Model model) {
+    public static JdbcModel getModel(Model model) {
         JdbcModel jdbcModel = null;
-        if (dataBaseType == DataBaseType.Mysql) {
+        if (model.getDataBaseType() == DataBaseType.Mysql) {
             jdbcModel = new MysqlModel();
         } else {
-            throw new NotSupportDataBaseTypeException("不支持的数据库类型[" + dataBaseType + "]");
+            throw new NotSupportDataBaseTypeException("不支持的数据库类型[" + model.getDataBaseType().toString() + "]");
         }
         jdbcModel.setModel(model);
         return jdbcModel;

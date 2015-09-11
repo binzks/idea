@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="error">
+    <errors>
+        <error code="0" message="成功" describe=""></error>
+        <error code="10001" message="成功1111" describe=""></error>
+    </errors>
+</root>

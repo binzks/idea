@@ -10,7 +10,7 @@ public class Filter {
 
     private String key; //过滤字段名称
 
-    private String type; //过滤类型  =,!=,>,<,>=,<=,between,like,in,not in
+    private FilterType type; //过滤类型  =,!=,>,<,>=,<=,between,like,in,not in,null,not null
 
     private Object value; //过滤值，如果是between则需要设置2个值","分开，如 1,10；如果是in或者not in则多个值用","分开
 
@@ -18,14 +18,14 @@ public class Filter {
 
     }
 
-    public Filter(String key, String type, Object value) {
+    public Filter(String key, FilterType type, Object value) {
         this.joinName = null;
         this.key = key;
         this.type = type;
         this.value = value;
     }
 
-    public Filter(String joinName, String key, String type, Object value) {
+    public Filter(String joinName, String key, FilterType type, Object value) {
         this.joinName = joinName;
         this.key = key;
         this.type = type;
@@ -48,11 +48,11 @@ public class Filter {
         this.key = key;
     }
 
-    public String getType() {
+    public FilterType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(FilterType type) {
         this.type = type;
     }
 

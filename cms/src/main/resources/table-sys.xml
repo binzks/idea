@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root type="table">
     <tables>
-        <table name="think_sys_module" comment="系统模块" ds="think" pk="id">
+        <table type="mysql" name="think_sys_module" comment="系统模块" ds="think" pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
                 <field name="name" comment="名称" type="varchar" size="50"
@@ -51,7 +51,7 @@
                       remark=""></data>
             </datas>
         </table>
-        <table name="think_sys_role" comment="系统用户角色" ds="think" pk="id">
+        <table type="mysql" name="think_sys_role" comment="系统用户角色" ds="think" pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
                 <field name="code" comment="编号" type="varchar" size="50"
@@ -73,7 +73,7 @@
                       status="1"></data>
             </datas>
         </table>
-        <table name="think_sys_role_action" comment="角色操作权限" ds="think"
+        <table type="mysql" name="think_sys_role_action" comment="角色操作权限" ds="think"
                pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
@@ -88,7 +88,7 @@
                        fields="parentid"></index>
             </indexes>
         </table>
-        <table name="think_sys_role_column" comment="角色列权限" ds="think"
+        <table type="mysql" name="think_sys_role_column" comment="角色列权限" ds="think"
                pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
@@ -103,7 +103,7 @@
                        fields="parentid"></index>
             </indexes>
         </table>
-        <table name="think_sys_user" comment="系统用户" ds="think" pk="id">
+        <table type="mysql" name="think_sys_user" comment="系统用户" ds="think" pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
                 <field name="code" comment="编号" type="varchar" size="50"
@@ -131,7 +131,7 @@
                       password="4ad418256efdfae2d275a9d6a8631df8" roleid="1" status="1"></data>
             </datas>
         </table>
-        <table name="think_sys_user_rowfilter" comment="用户行级过滤" ds="think"
+        <table type="mysql" name="think_sys_user_rowfilter" comment="用户行级过滤" ds="think"
                pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
@@ -149,7 +149,7 @@
                        fields="parentid"></index>
             </indexes>
         </table>
-        <table name="think_sys_cms_del_backup" comment="删除数据备份表" ds="think_log"
+        <table type="mysql" name="think_sys_cms_del_backup" comment="删除数据备份表" ds="think_log"
                pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
@@ -160,7 +160,7 @@
                 <field name="data" comment="删除的数据" type="text"></field>
             </fields>
         </table>
-        <table name="think_sys_cms_log" comment="CMS访问日志" ds="think_log"
+        <table type="mysql" name="think_sys_cms_log" comment="CMS访问日志" ds="think_log"
                pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
@@ -170,7 +170,7 @@
                 <field name="action" comment="操作" type="varchar" size="50"></field>
             </fields>
         </table>
-        <table name="think_sys_server_log" comment="服务日志" ds="think_log"
+        <table type="mysql" name="think_sys_server_log" comment="服务日志" ds="think_log"
                pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
@@ -190,7 +190,7 @@
                 <field name="createtime" comment="日志创建时间" type="bigint" size="20"></field>
             </fields>
         </table>
-        <table name="think_sys_platform" comment="平台" ds="think" pk="id">
+        <table type="mysql" name="think_sys_platform" comment="平台" ds="think" pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
                 <field name="code" comment="编号" type="varchar" size="50"

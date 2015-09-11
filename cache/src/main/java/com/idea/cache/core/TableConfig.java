@@ -29,13 +29,17 @@ public class TableConfig implements Config {
         }
         TableCache tableCache = TableCache.getInstance();
         List<Table> list = new ArrayList<>();
-        for (Iterator i = root.elementIterator(); i.hasNext(); ) {
+        Element tables = root.element("tables");
+        for (Iterator i = tables.elementIterator(); i.hasNext(); ) {
             Element element = (Element) i.next();
+            if (null == element) {
+                continue;
+            }
             List<Field> fields = getFields(element.element("fields"));
             List<Index> indexes = getIndexes(element.element("indexes"));
             List<Object[]> data = getData(element.element("datas"), fields);
             Table table = new Table();
-            table.setDataBaseType(DataBaseType.valueOfString(element.attributeValue("type").toUpperCase()));
+            table.setDataBaseType(DataBaseType.valueOfString(element.attributeValue("type")));
             String name = element.attributeValue("name");
             table.setName(name);
             table.setComment(element.attributeValue("comment"));
@@ -53,6 +57,12 @@ public class TableConfig implements Config {
         logger.debug("加载table配置：" + new Gson().toJson(list));
     }
 
+    /***
+     * 获取table的字段定义
+     *
+     * @param fieldsElement
+     * @return
+     */
     private List<Field> getFields(Element fieldsElement) {
         if (null == fieldsElement) {
             return null;
@@ -82,6 +92,12 @@ public class TableConfig implements Config {
         return list;
     }
 
+    /***
+     * 获取table的索引定义
+     *
+     * @param indexesElement
+     * @return
+     */
     private List<Index> getIndexes(Element indexesElement) {
         if (null == indexesElement) {
             return null;
@@ -104,6 +120,13 @@ public class TableConfig implements Config {
         return list;
     }
 
+    /***
+     * 获取table的默认初始化表数据
+     *
+     * @param dataElement
+     * @param fields
+     * @return
+     */
     private List<Object[]> getData(Element dataElement, List<Field> fields) {
         if (null == dataElement || null == fields) {
             return null;

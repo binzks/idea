@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="param">
+	<params>
+		<!-- value ${}可以设置参数，例如设置${key}会取System.getProperty(key)值替换原${key} -->
+		<param key="dir" value="${weboot}/Config" describe=""></param>
+		<param key="name" value="${weboot}" describe=""></param>
+	</params>
+</root>

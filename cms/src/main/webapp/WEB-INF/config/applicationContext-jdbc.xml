@@ -42,4 +42,6 @@
     <bean id="think_log" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dsLog"/>
     </bean>
+
+    <bean id="application" class="com.idea.framework.support.SpringApplicationContext"></bean>
 </beans>

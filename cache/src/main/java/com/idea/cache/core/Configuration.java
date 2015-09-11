@@ -31,9 +31,11 @@ public class Configuration {
                     SAXReader reader = new SAXReader();
                     Element root = reader.read(file).getRootElement();
                     String type = root.attributeValue("type");
-                    Config config = ConfigFactory.getConfig(ConfigType.valueOf(type));
-                    if (null != config) {
-                        config.init(root);
+                    if (StringUtils.isNotBlank(type)) {
+                        Config config = ConfigFactory.getConfig(ConfigType.valueOfString(type));
+                        if (null != config) {
+                            config.init(root);
+                        }
                     }
                 }
             }

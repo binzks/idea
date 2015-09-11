@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <views>
+        <view name="view名称，用于获取view，全局唯一" title="view在页面显示标题" rowsize="view每页显示行数，默认10"
+              backupondel="在数据删除的时候是否自动备份true-是 false-否 默认true" workflow="如果涉及到工作流，则填入工作流编号">
+            <columns>
+                <column name="列名，本view唯一，与model的列对应" describe="列描述，在页面显示列名"
+                        tag="列的类型，默认TEXT TEXT, DATE, DATETIME, PASSWORD, IMAGE, ITEM, DATAITEM, INT"
+                        center="列是否居中true-是 false-否 默认true" width="列长度，默认0表示自动"
+                        search="是否作为搜索页，默认false，TEXT查询为like" display="查询页面是否显示列，默认true"
+                        detail="显示详情页面是否显示列，默认true" add="添加页面是否需要添加列，默认true" edit="编辑页面是否需要列，默认true"
+                        default="默认值，now当前时间，user.id登录用户id，user.name登录用户名，其他则填值" required="新增和修改的时候是否必填项，默认false"
+                        rowfilter="是否行级过滤，默认false，只有当类型为ITEM活着DATAITEM的时候才有效">
+                    <!-- 如果列的类型是ITEM，则定义item的属性值，主要用于固定选择框 -->
+                    <items>
+                        <item name="显示名称" value="实际取值"></item>
+                    </items>
+                    <!-- 如果列的类型是DATAITEM，则定义取值数据源数据model和取值列，显示列，主要用于从数据源选择数据 -->
+                    <dataitem model="select_role" key="id" value="name"></dataitem>
+                </column>
+            </columns>
+            <actions>
+                <action name="操作按钮的名称，用于按钮授权，本view唯一" describe="操作按钮显示名称"
+                        type="按钮类型0-表示view级别的按钮 1-表示每行数据的按钮" href="按钮点击后的href" css="按钮CSS样式"
+                        confirm="如果操作按钮之前有提示信息，则输入提示信息，比如删除前提示"></action>
+            </actions>
+        </view>
+    </views>
+</root>

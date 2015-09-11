@@ -10,7 +10,7 @@ public class Order {
 
     private String key;  //排序字段名称
 
-    private String type; //排序规则 asc desc
+    private OrderType type; //排序规则 asc desc
 
     public String getJoinName() {
         return joinName;
@@ -28,11 +28,11 @@ public class Order {
         this.key = key;
     }
 
-    public String getType() {
+    public OrderType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(OrderType type) {
         this.type = type;
     }
 }

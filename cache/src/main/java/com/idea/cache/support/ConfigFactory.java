@@ -3,7 +3,7 @@ package com.idea.cache.support;
 import com.idea.cache.core.ErrorConfig;
 import com.idea.cache.core.ParamConfig;
 import com.idea.cache.core.TableConfig;
-import com.idea.cache.core.ViewConfig;
+import com.idea.cache.core.ModelConfig;
 
 /**
  * Created by zhoubin on 15/9/9.
@@ -18,8 +18,8 @@ public class ConfigFactory {
      */
     public static Config getConfig(ConfigType configType) {
         switch (configType) {
-            case View:
-                return new ViewConfig();
+            case Business:
+                return new ModelConfig();
             case Error:
                 return new ErrorConfig();
             case Param:

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="error">
+	<errors>
+		<error
+			code="错误编号，用于获取错误信息，全局唯一(0和99999已被AbstractServlet使用0-表示成功，99999表示系统异常)"
+			message="错误信息，如果有?表示需要替换的参数值，由程序获取错误的时候传入值替换" describe="错误的描述，用于说明错误的用途，程序中不使用这个属性"></error>
+	</errors>
+</root>

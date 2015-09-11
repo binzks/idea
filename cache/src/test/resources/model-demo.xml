@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <models>
+        <model type="数据库类型，mysql,sqlite,sqlserver,oracle" name="model名称，用于获取model，全局唯一" table="model对应的上面table表的名称"
+               describe="model描述，用于说明model作用，程序不使用这个属性">
+            <joins>
+                <join name="join的name，用于获取此join属性，本model唯一" table="关联表名称"
+                      type="关联类型(left join、right join、inner join)" key="关联表的字段名"
+                      joinName="join的name，用于获取过滤的字段的表，如果为空或者不设置表示model的主表，如果设置必须设置上面join的name，表示获取join对应的关联表"
+                      joinkey="主表字段名"></join>
+            </joins>
+            <filters>
+                <!-- 过滤类型 =,!=,>,<,>=,<=,between,like,in,not in -->
+                <!-- 过滤值 如果是between则需要设置2个值","分开，如 1,10；如果是in或者not in则多个值用","分开 -->
+                <filter
+                        joinName="join的name，用于获取过滤的字段的表，如果为空或者不设置表示model的主表，如果设置必须设置上面join的name，表示获取join对应的关联表"
+                        key="过滤字段名" type="过滤类型" value="过滤值"></filter>
+            </filters>
+            <orders>
+                <order
+                        joinName="join的name，用于获取过滤的字段的表，如果为空或者不设置表示model的主表，如果设置必须设置上面join的name，表示获取join对应的关联表"
+                        key="排序字段名" type="排序类型desc或者asc"></order>
+            </orders>
+            <!-- columns表示model的列，如果不设置，会根据model对应的table，把table所有的字段设置成列 -->
+            <columns>
+                <column name="对应表的字段名"
+                        joinName="join的name，用于获取过滤的字段的表，如果为空或者不设置表示model的主表，如果设置必须设置上面join的name，表示获取join对应的关联表"
+                        alias="列的别名，注意是关联字段后重名设置"></column>
+            </columns>
+        </model>
+    </models>
+</root>

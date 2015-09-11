@@ -1,6 +1,8 @@
 package com.idea.cache;
 
+import com.idea.framework.jdbc.ModelFactory;
 import com.idea.framework.jdbc.support.JdbcModel;
+import com.idea.framework.jdbc.support.model.Model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,10 +33,11 @@ public class ModelCache {
      *
      * @param list
      */
-    public void init(List<JdbcModel> list) {
+    public void init(List<Model> list) {
         this.cacheMap.clear();
-        for (JdbcModel jdbcModel : list) {
-            this.cacheMap.put(jdbcModel.getName(), jdbcModel);
+        for (Model model : list) {
+            JdbcModel jdbcModel = ModelFactory.getModel(model);
+            this.cacheMap.put(model.getName(), jdbcModel);
         }
     }
 

@@ -94,37 +94,47 @@ public class SqlPrepare {
         for (Filter filter : filterList) {
             filterBuffer.append(" AND ").append(getTableAlias(filter.getJoinName())).append(".").append(filter.getKey())
                     .append(" ");
-            String filterType = filter.getType().trim().toUpperCase();
-            if (filterType.equals("=") || filterType.equals("!=") || filterType.equals(">") || filterType.equals(">=")
-                    || filterType.equals("<") || filterType.equals("<=")) {
-                filterBuffer.append(filterType).append("?");
-                filterValues.add(filter.getValue());
-            } else if (filterType.equals("LIKE")) {
-                filterBuffer.append(filterType).append(" ").append("?");
-                filterValues.add("%" + filter.getValue() + "%");
-            } else if (filterType.equals("BETWEEN")) {
-                filterBuffer.append("BETWEEN ? AND ?");
-                String[] values = filter.getValue().toString().split(",");
-                filterValues.add(values[0]);
-                filterValues.add(values[1]);
-            } else if (filterType.equals("IN") || filterType.equals("NOT IN")) {
-                if (null == filter.getValue()) {
-                    filterBuffer.append(filterType).append("(?)");
-                    filterValues.add(null);
-                } else {
-                    String[] values = filter.getValue().toString().split(",");
-                    StringBuffer in = new StringBuffer();
-                    for (int i = 0; i < values.length; i++) {
-                        in.append(",?");
-                        filterValues.add(values[i]);
+            FilterType filterType = filter.getType();
+            filterBuffer.append(filterType.toString()).append(" ");
+            switch (filterType) {
+                case Eq:
+                case Ne:
+                    filterBuffer.append("?");
+                    filterValues.add(filter.getValue());
+                    break;
+                case Null:
+                case NotNull:
+                    break;
+                case Like:
+                    filterBuffer.append("?");
+                    filterValues.add("%" + filter.getValue() + "%");
+                    break;
+                case Between:
+                    String[] v = filter.getValue().toString().split(",");
+                    filterValues.add(v[0]);
+                    filterValues.add(v[1]);
+                    break;
+                case In:
+                case NotIn:
+                    if (null == filter.getValue()) {
+                        filterBuffer.append("(?)");
+                        filterValues.add(null);
+                    } else {
+                        String[] values = filter.getValue().toString().split(",");
+                        StringBuffer in = new StringBuffer();
+                        for (int i = 0; i < values.length; i++) {
+                            if (in.length() > 0) {
+                                in.append(",");
+                            }
+                            in.append("?");
+                            filterValues.add(values[i]);
+                        }
+                        filterBuffer.append(filterType).append("(").append(in).append(")");
                     }
-                    if (in.length() > 0) {
-                        in.delete(0, 1);
-                    }
-                    filterBuffer.append(filterType).append("(").append(in).append(")");
-                }
-            } else if (filterType.equals("IS NULL") || filterType.equals("IS NOT NULL")) {
-                filterBuffer.append(filterType);
+                    break;
+                default:
+                    filterBuffer.append("?");
+                    filterValues.add(filter.getValue());
             }
         }
         sqlValues.setSql(filterBuffer.toString());
@@ -254,13 +264,8 @@ public class SqlPrepare {
                 if (orderBuffer.length() > 0) {
                     orderBuffer.append(",");
                 }
-                if (order.getType().toUpperCase().equals("ASC")) {
-                    orderBuffer.append(getTableAlias(order.getJoinName())).append(".").append(order.getKey())
-                            .append(" ASC");
-                } else {
-                    orderBuffer.append(getTableAlias(order.getJoinName())).append(".").append(order.getKey())
-                            .append(" DESC");
-                }
+                orderBuffer.append(getTableAlias(order.getJoinName())).append(".").append(order.getKey())
+                        .append(" ").append(order.getType().toString());
             }
             return orderBuffer.toString();
         }

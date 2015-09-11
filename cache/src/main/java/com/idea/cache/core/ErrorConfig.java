@@ -27,7 +27,8 @@ public class ErrorConfig implements Config {
         }
         ErrorCache errorCache = ErrorCache.getInstance();
         Map<String, String> map = new HashMap<>();
-        for (Iterator i = root.elementIterator(); i.hasNext(); ) {
+        Element errors = root.element("errors");
+        for (Iterator i = errors.elementIterator(); i.hasNext(); ) {
             Element element = (Element) i.next();
             String code = element.attributeValue("code");
             if (null != errorCache.get(code)) {

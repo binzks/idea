@@ -7,8 +7,8 @@ package com.idea.cache.support;
 public enum ConfigType {
     Error("ERROR"),
     Param("PARAM"),
-    View("VIEW"),
-    Table("TABLE");
+    Table("TABLE"),
+    Business("BUSINESS");
 
     private String name;
 
@@ -29,8 +29,8 @@ public enum ConfigType {
      */
     public static ConfigType valueOfString(String name) {
         switch (name.toUpperCase()) {
-            case "VIEW":
-                return ConfigType.View;
+            case "BUSINESS":
+                return ConfigType.Business;
             case "ERROR":
                 return ConfigType.Error;
             case "PARAM":

@@ -38,12 +38,7 @@ public class TableCache {
     public void init(List<Table> list) {
         this.cacheMap.clear();
         for (Table table : list) {
-            JdbcTable jdbcTable = null;
-            try {
-                jdbcTable = TableFactory.getTable(DataBaseType.Mysql, table);
-            } catch (NotSupportDataBaseTypeException e) {
-                e.printStackTrace();
-            }
+            JdbcTable jdbcTable = TableFactory.getTable(table);
             this.cacheMap.put(table.getName(), jdbcTable);
         }
     }
