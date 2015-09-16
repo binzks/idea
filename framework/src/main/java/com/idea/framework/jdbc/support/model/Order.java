@@ -12,6 +12,16 @@ public class Order {
 
     private OrderType type; //排序规则 asc desc
 
+    public Order() {
+
+    }
+
+    public Order(String key, OrderType orderType) {
+        this.joinName = null;
+        this.key = key;
+        this.type = orderType;
+    }
+
     public String getJoinName() {
         return joinName;
     }

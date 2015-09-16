@@ -34,7 +34,11 @@ public class ViewCache {
     public void init(List<View> list) {
         this.cacheMap.clear();
         for (View view : list) {
-            this.cacheMap.put(view.getName(), view);
+            String key = view.getName();
+            if (null != this.cacheMap.get(key)) {
+                throw new RuntimeException("View定义[" + key + "]已存在！");
+            }
+            this.cacheMap.put(key, view);
         }
     }
 

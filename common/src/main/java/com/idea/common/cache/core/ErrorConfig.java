@@ -23,19 +23,15 @@ public class ErrorConfig implements Config {
         if (null == root) {
             return;
         }
-        ErrorCache errorCache = ErrorCache.getInstance();
         Map<String, String> map = new HashMap<>();
         Element errors = root.element("errors");
         for (Iterator i = errors.elementIterator(); i.hasNext(); ) {
             Element element = (Element) i.next();
             String code = element.attributeValue("code");
-            if (null != errorCache.get(code)) {
-                throw new RuntimeException("error[" + code + "]已存在重复名称");
-            }
             String message = element.attributeValue("message");
             map.put(code, message);
         }
-        errorCache.init(map);
+        ErrorCache.getInstance().init(map);
         logger.debug("加载Error配置：" + new Gson().toJson(map));
     }
 }

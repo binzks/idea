@@ -81,7 +81,7 @@
 </head>
 <body>
 	<form class="form-horizontal" role="form"
-		action="${baseUrl }/savepower${mid}-${id}.html" method="post">
+		action="${baseUrl }/save_power${mid}-${id}.html" method="post">
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right"></label>
 			<div class="col-sm-9">

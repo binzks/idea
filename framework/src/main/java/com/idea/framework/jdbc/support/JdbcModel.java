@@ -1,5 +1,6 @@
 package com.idea.framework.jdbc.support;
 
+import com.idea.framework.jdbc.support.model.Column;
 import com.idea.framework.jdbc.support.model.Filter;
 import com.idea.framework.jdbc.support.model.Model;
 import com.idea.framework.jdbc.support.model.Order;
@@ -18,44 +19,65 @@ public interface JdbcModel {
      *
      * @param model model定义
      */
-    public void setModel(Model model);
+    void setModel(Model model);
 
     /***
      * 获取model的名称标识
      *
-     * @return
+     * @return 返回model名称
      */
-    public String getName();
+    String getName();
+
+    /***
+     * 获取model对应主表的表名
+     *
+     * @return 返回model主表表名
+     */
+    String getTableName();
+
+    /***
+     * 获取model对应主表的主键名称
+     *
+     * @return 主键名称
+     */
+    String getPkName();
+
+    /***
+     * 获取model的列
+     *
+     * @return model的列
+     */
+    Map<String, Column> getColumns();
 
     /**
      * 根据主键值删除数据
      *
      * @param id 要删除数据的id
      */
-    public void deleteById(Object id);
+    void deleteById(Object id);
 
     /***
      * 根据过滤条件删除数据
      *
      * @param filters 过滤条件
      */
-    public void delete(List<Filter> filters);
+    void delete(List<Filter> filters);
 
     /***
      * 新增数据，返回新增数据的数据id，数据对象必须对应model列，并且有get字段名方法
      *
      * @param instance 待新增的数据
-     * @return
+     * @return 返回新增数据的id
      */
-    public int insert(Object instance);
+    int insert(Object instance);
 
     /***
      * 新增数据，返回新增数据的数据id
      *
      * @param dataMap 待新增的数据
-     * @return
+     * @return 返回新增数据的id
      */
-    public int insert(Map<String, Object> dataMap);
+    int insert(Map<String, Object> dataMap);
 
 
     /***
@@ -63,21 +85,21 @@ public interface JdbcModel {
      *
      * @param list 待新增的数据列表
      */
-    public void batchInsert(List<Map<String, Object>> list);
+    void batchInsert(List<Map<String, Object>> list);
 
     /***
      * 修改数据，数据主键必须有值，不修改数据值为null的列
      *
      * @param instance 待修改的数据
      */
-    public void update(Object instance);
+    void update(Object instance);
 
     /***
      * 修改数据，数据主键必须有值，不修改数据值为null的列
      *
      * @param dataMap 待修改的数据
      */
-    public void update(Map<String, Object> dataMap);
+    void update(Map<String, Object> dataMap);
 
     /***
      * 修改数据，数据主键必须有值
@@ -85,7 +107,7 @@ public interface JdbcModel {
      * @param instance     待修改的数据
      * @param isHandleNull 是否要修改值为null的字段true表示是
      */
-    public void update(Object instance, boolean isHandleNull);
+    void update(Object instance, boolean isHandleNull);
 
     /***
      * 修改数据，数据主键必须有值
@@ -93,14 +115,14 @@ public interface JdbcModel {
      * @param dataMap      待修改的数据
      * @param isHandleNull 是否要修改值为null的字段true表示是
      */
-    public void update(Map<String, Object> dataMap, boolean isHandleNull);
+    void update(Map<String, Object> dataMap, boolean isHandleNull);
 
     /***
      * 批量修改数据，list必须具有相同的数据结构，以第一条数据生成sql语句，不修改值为null的数据
      *
      * @param list 待修改的数据列表
      */
-    public void batchUpdate(List<Map<String, Object>> list);
+    void batchUpdate(List<Map<String, Object>> list);
 
     /**
      * 批量修改数据，list必须具有相同的数据结构，以第一条数据生成sql语句
@@ -108,46 +130,46 @@ public interface JdbcModel {
      * @param list         待修改的数据列表
      * @param isHandleNull 是否要修改值为null的字段true表示是
      */
-    public void batchUpdate(List<Map<String, Object>> list, boolean isHandleNull);
+    void batchUpdate(List<Map<String, Object>> list, boolean isHandleNull);
 
     /**
      * 获取数据总数
      *
-     * @return
+     * @return 返回总数
      */
-    public Integer getTotalCount();
+    Integer getTotalCount();
 
     /**
      * 根据过滤条件获取数据总数
      *
      * @param filters 过滤条件
-     * @return
+     * @return 返回总数
      */
-    public Integer getTotalCount(List<Filter> filters);
+    Integer getTotalCount(List<Filter> filters);
 
     /***
      * 查询单条数据，如果没有数据则返回null
      *
-     * @return
+     * @return 返回数据
      */
-    public Map<String, Object> selectMap();
+    Map<String, Object> selectMap();
 
     /***
      * 根据条件查询单条数据，如果没有数据则返回null
      *
      * @param filters 过滤条件
-     * @return
+     * @return 返回数据
      */
-    public Map<String, Object> selectMap(List<Filter> filters);
+    Map<String, Object> selectMap(List<Filter> filters);
 
     /***
      * 根据条件获取指定字段的单条数据，如果没有数据则返回null
      *
      * @param filters 过滤条件
      * @param columns 要查询的字段，多个,隔开 *表示全部
-     * @return
+     * @return 返回数据
      */
-    public Map<String, Object> selectMap(List<Filter> filters, String columns);
+    Map<String, Object> selectMap(List<Filter> filters, String columns);
 
     /**
      * 获取单条数据，如果没有数据则返回null
@@ -155,33 +177,33 @@ public interface JdbcModel {
      * @param filters 过滤条件
      * @param orders  排序
      * @param columns 要查询的字段，多个,隔开 *表示全部
-     * @return
+     * @return 返回数据
      */
-    public Map<String, Object> selectMap(List<Filter> filters, List<Order> orders, String columns);
+    Map<String, Object> selectMap(List<Filter> filters, List<Order> orders, String columns);
 
     /***
      * 查询数据，如果没有数据则返回null
      *
-     * @return
+     * @return 返回数据列表
      */
-    public List<Map<String, Object>> selectMaps();
+    List<Map<String, Object>> selectMaps();
 
     /***
      * 根据条件查询数据，如果没有数据则返回null
      *
      * @param filters 过滤条件
-     * @return
+     * @return 返回数据列表
      */
-    public List<Map<String, Object>> selectMaps(List<Filter> filters);
+    List<Map<String, Object>> selectMaps(List<Filter> filters);
 
     /***
      * 根据条件获取指定字段的数据，如果没有数据则返回null
      *
      * @param filters 过滤条件
      * @param columns 要查询的字段，多个,隔开 *表示全部
-     * @return
+     * @return 返回数据列表
      */
-    public List<Map<String, Object>> selectMaps(List<Filter> filters, String columns);
+    List<Map<String, Object>> selectMaps(List<Filter> filters, String columns);
 
     /***
      * 根据条件获取分页数据，如果没有数据则返回null
@@ -189,10 +211,10 @@ public interface JdbcModel {
      * @param filters 过滤条件
      * @param begin   开始数据行
      * @param size    查询数量，0表示不限制
-     * @return
+     * @return 返回数据列表
      */
-    public List<Map<String, Object>> selectMaps(List<Filter> filters, int begin,
-                                                int size);
+    List<Map<String, Object>> selectMaps(List<Filter> filters, int begin,
+                                         int size);
 
     /***
      * 根据条件获取指定字段的分页数据，如果没有数据则返回null
@@ -201,10 +223,10 @@ public interface JdbcModel {
      * @param columns 要查询的字段，多个,隔开 *表示全部
      * @param begin   开始数据行
      * @param size    查询数量，0表示不限制
-     * @return
+     * @return 返回数据列表
      */
-    public List<Map<String, Object>> selectMaps(List<Filter> filters, String columns, int begin,
-                                                int size);
+    List<Map<String, Object>> selectMaps(List<Filter> filters, String columns, int begin,
+                                         int size);
 
     /**
      * 获取数据，如果没有数据则返回null
@@ -214,8 +236,8 @@ public interface JdbcModel {
      * @param columns 要查询的字段，多个,隔开 *表示全部
      * @param begin   开始数据行
      * @param size    查询数量，0表示不限制
-     * @return
+     * @return 返回数据列表
      */
-    public List<Map<String, Object>> selectMaps(List<Filter> filters, List<Order> orders, String columns, int begin,
-                                                int size);
+    List<Map<String, Object>> selectMaps(List<Filter> filters, List<Order> orders, String columns, int begin,
+                                         int size);
 }

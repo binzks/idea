@@ -1,10 +1,7 @@
 package com.idea.common.cache.support;
 
 
-import com.idea.common.cache.core.ErrorConfig;
-import com.idea.common.cache.core.ModelConfig;
-import com.idea.common.cache.core.ParamConfig;
-import com.idea.common.cache.core.TableConfig;
+import com.idea.common.cache.core.*;
 
 /**
  * Created by zhoubin on 15/9/9.
@@ -19,7 +16,9 @@ public class ConfigFactory {
      */
     public static Config getConfig(ConfigType configType) {
         switch (configType) {
-            case Business:
+            case View:
+                return new ViewConfig();
+            case Model:
                 return new ModelConfig();
             case Error:
                 return new ErrorConfig();

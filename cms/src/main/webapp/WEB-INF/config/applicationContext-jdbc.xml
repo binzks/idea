@@ -6,7 +6,7 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url"
-                  value="jdbc:mysql://localhost:3306/think?autoReconnect=true&amp;characterEncoding=utf-8"/>
+                  value="jdbc:mysql://localhost:3306/idea?autoReconnect=true&amp;characterEncoding=utf-8"/>
         <property name="username" value="root"/>
         <property name="password" value=""/>
         <!-- 连接池启动时的初始值 -->
@@ -19,14 +19,14 @@
         <property name="minIdle" value="1"/>
     </bean>
 
-    <bean id="think" class="org.springframework.jdbc.core.JdbcTemplate">
+    <bean id="idea" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <bean id="dsLog" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url"
-                  value="jdbc:mysql://localhost:3306/think_log?autoReconnect=true&amp;characterEncoding=utf-8"/>
+                  value="jdbc:mysql://localhost:3306/idea_log?autoReconnect=true&amp;characterEncoding=utf-8"/>
         <property name="username" value="root"/>
         <property name="password" value=""/>
         <!-- 连接池启动时的初始值 -->
@@ -39,7 +39,7 @@
         <property name="minIdle" value="1"/>
     </bean>
 
-    <bean id="think_log" class="org.springframework.jdbc.core.JdbcTemplate">
+    <bean id="idea_log" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dsLog"/>
     </bean>
 

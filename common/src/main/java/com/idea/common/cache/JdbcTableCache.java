@@ -12,19 +12,19 @@ import java.util.Map;
  * Created by zhoubin on 15/9/9.
  * JdbcTabel缓存对象，单例模式，用于创建数据库脚本和分析系统
  */
-public class TableCache {
+public class JdbcTableCache {
 
     private Map<String, JdbcTable> cacheMap; //jdbcTable缓存map
 
     private static class ConfigureHolder {
-        private static TableCache instance = new TableCache();
+        private static JdbcTableCache instance = new JdbcTableCache();
     }
 
-    private TableCache() {
+    private JdbcTableCache() {
         this.cacheMap = new HashMap<>();
     }
 
-    public static TableCache getInstance() {
+    public static JdbcTableCache getInstance() {
         return ConfigureHolder.instance;
     }
 
@@ -36,8 +36,13 @@ public class TableCache {
     public void init(List<Table> list) {
         this.cacheMap.clear();
         for (Table table : list) {
+            String key = table.getName();
+            if (null != this.cacheMap.get(key)) {
+                throw new RuntimeException("JdbcTable定义[" + key + "]已存在！");
+            }
             JdbcTable jdbcTable = TableFactory.getTable(table);
-            this.cacheMap.put(table.getName(), jdbcTable);
+            jdbcTable.initTable();
+            this.cacheMap.put(key, jdbcTable);
         }
     }
 

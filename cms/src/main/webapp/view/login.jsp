@@ -32,7 +32,7 @@
 											<i class="icon-coffee green"></i> 请输入用户名密码
 										</h4>
 										<div class="space-6"></div>
-										<div style="color: red">${errmsg}</div>
+										<div style="color: red">${errMsg}</div>
 										<form action="/sys/login.do" method="post">
 											<fieldset>
 												<label class="block clearfix"> <span

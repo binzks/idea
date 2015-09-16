@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="model">
+    <models>
+        <model type="mysql" name="model_login_user" ds="idea" table="idea_sys_user" pk="id">
+            <joins>
+                <join name="1" table="idea_sys_role" type="left join" key="id"
+                      joinkey="role_id"></join>
+            </joins>
+            <filters>
+                <filter key="status" type="=" value="1"></filter>
+            </filters>
+            <columns>
+                <column name="id"></column>
+                <column name="code"></column>
+                <column name="name"></column>
+                <column name="password"></column>
+                <column name="role_id"></column>
+                <column name="name" joinName="1" alias="role_name"></column>
+                <column name="module_ids" joinName="1"></column>
+                <column name="last_ip"></column>
+                <column name="last_time"></column>
+            </columns>
+        </model>
+        <model type="mysql" name="model_login_module" ds="idea" table="idea_sys_module" pk="id">
+            <filters>
+                <filter key="status" type="=" value="1"></filter>
+            </filters>
+            <orders>
+                <order key="order" type="asc"></order>
+                <order key="parent_id" type="asc"></order>
+            </orders>
+        </model>
+        <model type="mysql" name="model_sys_role_action" ds="idea" table="idea_sys_role_action" pk="id"></model>
+        <model type="mysql" name="model_sys_role_column" ds="idea" table="idea_sys_role_column" pk="id"></model>
+        <model type="mysql" name="model_sys_cms_log" ds="idea_log" table="idea_sys_cms_log" pk="id"></model>
+        <model type="mysql" name="model_sys_cms_del_backup" ds="idea_log" table="idea_sys_cms_del_backup"
+               pk="id"></model>
+        <model type="mysql" name="model_sys_module" ds="idea" table="idea_sys_module" pk="id">
+            <joins>
+                <join name="1" table="idea_sys_module" type="left join" key="id"
+                      joinkey="parent_id"></join>
+            </joins>
+            <columns>
+                <column name="id"></column>
+                <column name="name"></column>
+                <column name="parent_id"></column>
+                <column name="name" joinName="1" alias="parent_name"></column>
+                <column name="type"></column>
+                <column name="url"></column>
+                <column name="view_code"></column>
+                <column name="status"></column>
+                <column name="icon"></column>
+                <column name="order"></column>
+                <column name="remark"></column>
+            </columns>
+        </model>
+        <model type="mysql" name="model_sys_select_module_group" ds="idea" table="idea_sys_module" pk="id">
+            <filters>
+                <filter key="status" type="=" value="1"></filter>
+                <filter key="type" type="=" value="0"></filter>
+            </filters>
+            <columns>
+                <column name="id"></column>
+                <column name="name"></column>
+            </columns>
+        </model>
+
+        <model type="mysql" name="model_sys_role" ds="idea" table="idea_sys_role" pk="id"></model>
+
+        <model type="mysql" name="model_sys_user" ds="idea" table="idea_sys_user" pk="id"></model>
+
+        <model type="mysql" name="model_select_role" ds="idea" table="idea_sys_role" pk="id">
+            <filters>
+                <filter key="status" type="=" value="1"></filter>
+            </filters>
+            <columns>
+                <column name="id"></column>
+                <column name="name"></column>
+            </columns>
+        </model>
+        <model type="mysql" name="model_sys_platform" ds="idea" table="idea_sys_platform" pk="id"></model>
+        <model type="mysql" name="model_sys_user_row_filter" ds="idea" table="idea_sys_user_row_filter" pk="id"></model>
+        <!--工作流-->
+        <model type="mysql" name="model_sys_workflow" ds="idea" table="idea_sys_workflow" pk="id"></model>
+        <model type="mysql" name="model_sys_workflow_step" ds="idea" table="idea_sys_workflow_step" pk="id">
+            <joins>
+                <join name="1" table="idea_sys_workflow" type="left join" key="id"
+                      joinkey="parent_id"></join>
+                <join name="2" table="idea_sys_workflow_step" type="left join"
+                      key="id" joinkey="last_step_id"></join>
+            </joins>
+            <columns>
+                <column name="id"></column>
+                <column name="parent_id"></column>
+                <column name="last_step_id"></column>
+                <column name="name"></column>
+                <column name="value"></column>
+                <column name="type"></column>
+                <column name="user_names"></column>
+                <column name="user_ids"></column>
+                <column name="describe"></column>
+                <column name="name" joinName="1" alias="parent_name"></column>
+                <column name="name" joinName="2" alias="last_step_name"></column>
+            </columns>
+        </model>
+        <model type="mysql" name="model_login_workflow_step" ds="idea" table="idea_sys_workflow_step" pk="id">
+            <orders>
+                <order key="last_step_id" type="asc"></order>
+            </orders>
+            <columns>
+                <column name="id"></column>
+                <column name="last_step_id"></column>
+                <column name="name"></column>
+                <column name="value"></column>
+                <column name="type"></column>
+            </columns>
+        </model>
+        <model type="mysql" name="model_next_workflow_step" ds="idea" table="idea_sys_workflow_step" pk="id">
+            <joins>
+                <join name="1" table="idea_sys_workflow_step" type="left join"
+                      key="id" joinkey="last_step_id"></join>
+            </joins>
+            <columns>
+                <column name="value"></column>
+            </columns>
+        </model>
+        <model type="mysql" name="model_sys_workflow_log" ds="idea" table="idea_sys_workflow_log" pk="id"></model>
+        <!--工作流-->
+    </models>
+</root>

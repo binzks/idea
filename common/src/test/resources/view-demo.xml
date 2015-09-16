@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
+<root type="view">
     <views>
-        <view name="view名称，用于获取view，全局唯一" title="view在页面显示标题" model="view对应数据model名称" rowSize="view每页显示行数，默认10">
+        <view name="view名称，用于获取view，全局唯一" title="view在页面显示标题" model="view对应数据model名称"
+              rowSize="view每页显示行数，默认10">
             <columns>
                 <column name="列名，本view唯一，与model的列对应" describe="列描述，在页面显示列名"
                         tag="列的类型，默认TEXT TEXT, DATE, DATETIME, PASSWORD, IMAGE, ITEM, DATAITEM, INT"

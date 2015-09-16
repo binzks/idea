@@ -8,27 +8,25 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by zhoubin on 15/9/7.
+ * mysql 数据处理对象
  */
 public class MysqlModel implements JdbcModel {
 
     private static Logger logger = Logger.getLogger(JdbcModel.class);  //log4j日志对象
     private Model model;  //model定义
-    private JdbcTemplate jdbcTemplate;  //spring jdbctemplate对象
+    private JdbcTemplate jdbcTemplate;  //spring JdbcTemplate对象
     private SqlPrepare sqlPrepare;  //数据对象和sql语句处理对象
     private String columnSql;  //model列的查询语句块
     private String filterSql; //model定义的默认过滤条件sql语句，在查询的时候先增加过滤条件再增加业务过滤条件
@@ -39,8 +37,23 @@ public class MysqlModel implements JdbcModel {
     public void setModel(Model model) {
         this.model = model;
         this.jdbcTemplate = (JdbcTemplate) SpringApplicationContext.getBean(model.getDsName());
+        //如果model对于的列为空，则获取table所对应的所有列作为model的列
+        Map<String, Column> columns = this.model.getColumns();
+        if (null == columns) {
+            List<Map<String, Object>> list = jdbcTemplate.queryForList(String.format("describe %s", this.model.getTableName()));
+            columns = new HashMap<>();
+            for (Map<String, Object> map : list) {
+                Column column = new Column();
+                String name = (String) map.get("Field");
+                column.setName(name);
+                column.setJoinName(null);
+                column.setAlias(null);
+                columns.put(name, column);
+            }
+            this.model.setColumns(columns);
+        }
         this.sqlPrepare = new SqlPrepare(model.getJoins());
-        this.columnSql = this.sqlPrepare.getColumnSql(this.model.getColumns());
+        this.columnSql = this.sqlPrepare.getColumnSql(columns);
         SqlValues sqlValues = this.sqlPrepare.getFilter(this.model.getFilters());
         this.filterSql = sqlValues.getSql();
         this.filterValues = sqlValues.getValues();
@@ -53,8 +66,24 @@ public class MysqlModel implements JdbcModel {
     }
 
     @Override
+    public String getTableName() {
+        return this.model.getTableName();
+    }
+
+    @Override
+    public String getPkName() {
+        return this.model.getPkName();
+    }
+
+    @Override
+    public Map<String, Column> getColumns() {
+        return this.model.getColumns();
+    }
+
+
+    @Override
     public void deleteById(Object id) {
-        String sql = "DELETE FROM `" + this.model.getTableName() + "` WHERE " + this.model.getPkName() + "=?";
+        String sql = String.format("DELETE FROM `%s` WHERE %s=?", this.model.getTableName(), this.model.getPkName());
         logger.debug("sql: " + sql + " values: " + id);
         this.jdbcTemplate.update(sql, id);
     }
@@ -64,8 +93,7 @@ public class MysqlModel implements JdbcModel {
         SqlValues sqlValues = this.sqlPrepare.getFilter(filters);
         String tableName = this.model.getTableName();
         String tableAlias = this.sqlPrepare.getTableAlias(tableName);
-        String sql = "DELETE " + tableAlias + " FROM `" + tableName + "` " + tableAlias + " WHERE 1=1"
-                + sqlValues.getSql();
+        String sql = String.format("DELETE %s FROM `%s` %s WHERE 1=1%s", tableAlias, tableName, tableAlias, sqlValues.getSql());
         List<Object> values = sqlValues.getValues();
         logger.debug("sql: " + sql + " values: " + new Gson().toJson(values));
         this.jdbcTemplate.update(sql, values.toArray());
@@ -90,20 +118,16 @@ public class MysqlModel implements JdbcModel {
      */
     private int insert(Object instance, Map<String, Object> dataMap) {
         SqlValues sqlValues = this.sqlPrepare.getInsert(instance, dataMap, this.model.getColumns(), this.model.getPkName());
-        String sql = "INSERT INTO " + this.model.getTableName() + "(" + sqlValues.getSql() + ")" + " VALUES " + "(" + sqlValues.getValSql()
-                + ")";
+        String sql = String.format("INSERT INTO %s(%s) VALUES (%s)", this.model.getTableName(), sqlValues.getSql(), sqlValues.getValSql());
         List<Object> values = sqlValues.getValues();
         logger.debug("sql: " + sql + " values: " + new Gson().toJson(values));
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        this.jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                for (int i = 0; i < values.size(); i++) {
-                    ps.setObject(i + 1, values.get(i));
-                }
-                return ps;
+        this.jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            for (int i = 0; i < values.size(); i++) {
+                ps.setObject(i + 1, values.get(i));
             }
+            return ps;
         }, keyHolder);
         return keyHolder.getKey().intValue();
     }
@@ -112,13 +136,12 @@ public class MysqlModel implements JdbcModel {
     public void batchInsert(List<Map<String, Object>> list) {
         String sql = null;
         List<Object[]> batchArgs = new ArrayList<>();
-        List<Column> columns = this.model.getColumns();
+        Map<String, Column> columns = this.model.getColumns();
         String pkName = this.model.getPkName();
         for (Map<String, Object> map : list) {
             SqlValues sqlValues = this.sqlPrepare.getInsert(null, map, columns, pkName);
             if (null == sql) {
-                sql = "INSERT INTO " + this.model.getTableName() + "(" + sqlValues.getSql() + ")" + " VALUES " + "(" + sqlValues.getValSql()
-                        + ")";
+                sql = String.format("INSERT INTO %s(%s) VALUES (%s)", this.model.getTableName(), sqlValues.getSql(), sqlValues.getValSql());
             }
             batchArgs.add(sqlValues.getValues().toArray());
         }
@@ -156,7 +179,7 @@ public class MysqlModel implements JdbcModel {
     private void update(Object instance, Map<String, Object> dataMap, boolean isHandleNull) {
         String pkName = this.model.getPkName();
         SqlValues sqlValues = this.sqlPrepare.getUpdate(instance, dataMap, isHandleNull, this.model.getColumns(), pkName);
-        String sql = "UPDATE `" + this.model.getTableName() + "` SET " + sqlValues.getSql() + " WHERE `" + pkName + "`=?";
+        String sql = String.format("UPDATE `%s` SET %s WHERE `%s`=?", this.model.getTableName(), sqlValues.getSql(), pkName);
         List<Object> values = sqlValues.getValues();
         logger.debug("sql: " + sql + " values: " + new Gson().toJson(values));
         this.jdbcTemplate.update(sql, values.toArray());
@@ -175,7 +198,7 @@ public class MysqlModel implements JdbcModel {
         for (Map<String, Object> map : list) {
             SqlValues sqlValues = this.sqlPrepare.getUpdate(null, map, isHandleNull, this.model.getColumns(), pkName);
             if (null == sql) {
-                sql = "UPDATE `" + this.model.getTableName() + "` SET " + sqlValues.getSql() + " WHERE `" + pkName + "`=?";
+                sql = String.format("UPDATE `%s` SET %s WHERE `%s`=?", this.model.getTableName(), sqlValues.getSql(), pkName);
             }
             batchArgs.add(sqlValues.getValues().toArray());
         }
@@ -271,14 +294,13 @@ public class MysqlModel implements JdbcModel {
      * @param columns 查询列字段
      * @param begin   数据开始行数
      * @param size    查询数据量
-     * @return
+     * @return 返回查询的sql语句和值
      */
     private SqlValues getSelect(List<Filter> filters, List<Order> orders, String columns, int begin, int size) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<Object> values = new ArrayList<>();
         String tableName = this.model.getTableName();
-        sql.append("SELECT " + columns + " FROM `" + tableName + "` AS " + this.sqlPrepare.getTableAlias(tableName) + " " + this.sqlPrepare.getJoinSql()
-                + " WHERE 1=1" + filterSql);
+        sql.append("SELECT ").append(columns).append(" FROM `").append(tableName).append("` AS ").append(this.sqlPrepare.getTableAlias(tableName)).append(" ").append(this.sqlPrepare.getJoinSql()).append(" WHERE 1=1").append(filterSql);
         if (null != this.filterValues) {
             values.addAll(this.filterValues);
         }
@@ -291,10 +313,10 @@ public class MysqlModel implements JdbcModel {
         String order = this.orderSql;
         order += this.sqlPrepare.getOrderSql(orders);
         if (StringUtils.isNotBlank(order)) {
-            sql.append(" ORDER BY " + order);
+            sql.append(" ORDER BY ").append(order);
         }
         if (size > 0) {
-            sql.append(" LIMIT " + begin + "," + size);
+            sql.append(" LIMIT ").append(begin).append(",").append(size);
         }
         SqlValues sv = new SqlValues();
         sv.setSql(sql.toString());

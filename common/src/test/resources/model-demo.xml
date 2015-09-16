@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
+<root type="model">
     <models>
-        <model type="数据库类型，mysql,sqlite,sqlserver,oracle" name="model名称，用于获取model，全局唯一" table="model对应的上面table表的名称"
-               describe="model描述，用于说明model作用，程序不使用这个属性">
+        <model type="数据库类型，mysql,sqlite,sqlserver,oracle" name="model名称，用于获取model，全局唯一" ds="数据源名称"
+               table="model对应的上面table表的名称"
+               pk="表的主键名称" describe="model描述，用于说明model作用，程序不使用这个属性">
             <joins>
                 <join name="join的name，用于获取此join属性，本model唯一" table="关联表名称"
                       type="关联类型(left join、right join、inner join)" key="关联表的字段名"

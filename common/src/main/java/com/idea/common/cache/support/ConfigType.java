@@ -2,13 +2,14 @@ package com.idea.common.cache.support;
 
 /**
  * Created by zhoubin on 15/9/9.
- * xml配置类型 错误，参数，View，表
+ * xml配置类型 错误，参数，View，表，model
  */
 public enum ConfigType {
     Error("ERROR"),
     Param("PARAM"),
     Table("TABLE"),
-    Business("BUSINESS");
+    Model("MODEL"),
+    View("VIEW");
 
     private String name;
 
@@ -29,8 +30,10 @@ public enum ConfigType {
      */
     public static ConfigType valueOfString(String name) {
         switch (name.toUpperCase()) {
-            case "BUSINESS":
-                return ConfigType.Business;
+            case "MODEL":
+                return ConfigType.Model;
+            case "VIEW":
+                return ConfigType.View;
             case "ERROR":
                 return ConfigType.Error;
             case "PARAM":

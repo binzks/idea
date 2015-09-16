@@ -29,7 +29,7 @@ public class MailUtils {
      * @param subject  邮件主题
      * @param to       发送给哪些邮箱，多个用,隔开
      * @param content  邮件内容
-     * @throws Exception
+     * @throws Exception 异常
      */
     public static void sendTextMail(String host, Integer port, String user, String password, String subject, String to, String content)
             throws Exception {
@@ -46,7 +46,7 @@ public class MailUtils {
      * @param subject  邮件主题
      * @param to       发送给哪些邮箱，多个用,隔开
      * @param content  邮件内容
-     * @throws Exception
+     * @throws Exception 异常
      */
     public static void sendMail(String host, Integer port, String user, String password, String subject, String to, String content)
             throws Exception {
@@ -66,7 +66,7 @@ public class MailUtils {
      * @param bcc      密送哪些邮箱，多个,隔开
      * @param content  邮件内容
      * @param type     发送类型 text或者html
-     * @throws Exception
+     * @throws Exception 异常
      */
     public static void sendMail(String host, Integer port, String user, String password, String subject, String to, String cc, String bcc, String content, String type)
             throws Exception {

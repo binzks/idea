@@ -18,7 +18,7 @@ public class ModelFactory {
      * @return 数据model对象
      */
     public static JdbcModel getModel(Model model) {
-        JdbcModel jdbcModel = null;
+        JdbcModel jdbcModel;
         if (model.getDataBaseType() == DataBaseType.Mysql) {
             jdbcModel = new MysqlModel();
         } else {

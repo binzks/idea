@@ -18,7 +18,7 @@ public class TableFactory {
      * @return 数据库表处理对象
      */
     public static JdbcTable getTable(Table table) {
-        JdbcTable jdbcTable = null;
+        JdbcTable jdbcTable;
         if (table.getDataBaseType() == DataBaseType.Mysql) {
             jdbcTable = new MysqlTable();
         } else {

@@ -1,10 +1,17 @@
 package com.idea.common.cache.core;
 
+import com.google.gson.Gson;
+import com.idea.common.cache.JdbcModelCache;
+import com.idea.common.cache.ViewCache;
 import com.idea.common.cache.support.Config;
+import com.idea.common.view.View;
 import com.idea.common.view.ViewAction;
 import com.idea.common.view.ViewColumn;
 import com.idea.common.view.ViewColumnTag;
+import com.idea.framework.jdbc.support.JdbcModel;
+import com.idea.framework.jdbc.support.JdbcTable;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.dom4j.Element;
 
 import java.util.*;
@@ -13,27 +20,32 @@ import java.util.*;
  * Created by zhoubin on 15/9/11.
  */
 public class ViewConfig implements Config {
+
+    private static Logger logger = Logger.getLogger(ViewConfig.class);  //log4j日志对象
+
     @Override
     public void init(Element root) {
         if (null == root) {
             return;
         }
-//        for (Iterator i = root.elementIterator(); i.hasNext(); ) {
-//            Element element = (Element) i.next();
-//            String name = element.attributeValue("name");
-//            String title = element.attributeValue("title");
-//            Integer rowSize = getIntFromString(element.attributeValue("rowsize"), 10);
-//            Model model = ModelManager.getInstance().getModel(element.attributeValue("model"));
-//            Boolean backupOnDel = getBoolFromString(element.attributeValue("backupondel"), true);
-//            String workflow = element.attributeValue("workflow");
-//            List<ViewColumn> columns = getViewColumns(element.element("columns"));
-//            List<ViewAction> actions = getViewActions(element.element("actions"));
-//            View view = new View(name, title, rowSize, model, backupOnDel, workflow, columns, actions);
-//            this.viewMap.put(name, view);
-//            Gson gson = new Gson();
-//            logger.debug("加载view[" + name + "][" + title + "][rowSize=" + rowSize + "][backupOnDel=" + backupOnDel
-//                    + "]workflow[" + workflow + "]columns=" + gson.toJson(columns) + "actions=" + gson.toJson(actions));
-//        }
+        List<View> list = new ArrayList<>();
+        Element views = root.element("views");
+        for (Iterator i = views.elementIterator(); i.hasNext(); ) {
+            Element element = (Element) i.next();
+            List<ViewColumn> columns = getViewColumns(element.element("columns"));
+            List<ViewAction> actions = getViewActions(element.element("actions"));
+            Integer rowSize = getIntFromString(element.attributeValue("rowSize"), 10);
+            View view = new View();
+            view.setName(element.attributeValue("name"));
+            view.setTitle(element.attributeValue("title"));
+            view.setModelName(element.attributeValue("model"));
+            view.setRowSize(rowSize);
+            view.setColumns(columns);
+            view.setActions(actions);
+            list.add(view);
+        }
+        ViewCache.getInstance().init(list);
+        logger.debug("加载view配置：" + new Gson().toJson(list));
     }
 
     private List<ViewColumn> getViewColumns(Element columnsElement) {
@@ -62,7 +74,7 @@ public class ViewConfig implements Config {
             viewColumn.setRowFilter(getBoolFromString(element.attributeValue("rowFilter"), false));
             viewColumn.setDefaultValue(element.attributeValue("default"));
             viewColumn.setItems(getItems(element.element("items")));
-            Element dataItemElement = element.element("dataitem");
+            Element dataItemElement = element.element("dataItem");
             if (null != dataItemElement) {
                 viewColumn.setItemModel(dataItemElement.attributeValue("model"));
                 viewColumn.setItemKey(dataItemElement.attributeValue("key"));
@@ -96,7 +108,7 @@ public class ViewConfig implements Config {
         if (null == itemsElement) {
             return null;
         }
-        Map<String, String> items = new LinkedHashMap<String, String>();
+        Map<String, String> items = new LinkedHashMap<>();
         for (Iterator item = itemsElement.elementIterator(); item.hasNext(); ) {
             Element itemElement = (Element) item.next();
             items.put(itemElement.attributeValue("value"), itemElement.attributeValue("name"));

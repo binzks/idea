@@ -1,8 +1,6 @@
 package com.idea.common.view;
 
-import com.idea.common.cache.ModelCache;
-import com.idea.framework.jdbc.ModelFactory;
-import com.idea.framework.jdbc.support.JdbcModel;
+import com.idea.common.cache.JdbcModelCache;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,17 +11,17 @@ public class ViewColumn {
 
     private String name; // 字段名称
     private String describe; // 字段描述
-    private Integer width;
-    private Boolean center;
-    private ViewColumnTag tag;
-    private boolean search;
-    private boolean display;
-    private boolean detail;
-    private boolean add;
-    private boolean edit;
-    private boolean required;
-    private boolean rowFilter;
-    private String defaultValue;
+    private Integer width;  //页面显示长度，默认0
+    private Boolean center; //页面是否居中显示
+    private ViewColumnTag tag; //列的页面展示形式 text int item等
+    private boolean search; //列是否暂时搜索
+    private boolean display; //列是否在list页面显示
+    private boolean detail; //列是否在详细页面显示
+    private boolean add; //列是否在添加页面显示
+    private boolean edit; //列是否在编辑页面显示
+    private boolean required; //列是否是必填项
+    private boolean rowFilter;  //列是否是行级过滤
+    private String defaultValue; //列在新增和编辑的时候的默认值
     private String itemModel;  //如果是datatime类型，获取数据的model名称
     private String itemKey; // model取值字段
     private String itemValue; // model显示字段
@@ -160,7 +158,7 @@ public class ViewColumn {
     public Map<String, String> getItems() {
         if (tag == ViewColumnTag.DateItem) {
             items = new HashMap<String, String>();
-            List<Map<String, Object>> list = ModelCache.getInstance().get(itemModel).selectMaps();
+            List<Map<String, Object>> list = JdbcModelCache.getInstance().get(itemModel).selectMaps();
             for (int i = 0; i < list.size(); i++) {
                 Map<String, Object> map = list.get(i);
                 items.put(map.get(itemKey).toString(), map.get(itemValue).toString());

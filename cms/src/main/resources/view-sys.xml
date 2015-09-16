@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="view">
+    <views>
+        <view name="view_sys_module" title="模块" rowSize="10" model="model_sys_module">
+            <columns>
+                <column name="id" describe="主键" tag="text" center="true"
+                        width="0" display="false" add="false" edit="false"></column>
+                <column name="name" describe="模块名称" search="true" required="true"></column>
+                <column name="parent_name" describe="模块组" add="false" edit="false"></column>
+                <column name="parent_id" describe="模块组" tag="dataItem" search="true"
+                        display="false" detail="false" default="0">
+                    <dataItem model="model_sys_select_module_group" key="id"
+                              value="name"></dataItem>
+                </column>
+                <column name="type" describe="类型" tag="item" required="true"
+                        search="true">
+                    <items>
+                        <item name="模块组" value="0"></item>
+                        <item name="模块" value="1"></item>
+                    </items>
+                </column>
+                <column name="url" describe="URL"></column>
+                <column name="view_code" describe="View"></column>
+                <column name="status" describe="状态" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="停用" value="0"></item>
+                        <item name="启用" value="1"></item>
+                    </items>
+                </column>
+                <column name="icon" describe="图标"></column>
+                <column name="order" describe="序号" tag="int" required="true"></column>
+                <column name="remark" describe="备注"></column>
+            </columns>
+            <actions>
+                <action name="detail" describe="模块详情" type="1" href="/tpl/detail"
+                        css="blue icon-zoom-in bigger-130"></action>
+                <action name="add" describe="添加模块" type="0" href="/tpl/add"
+                        css="btn btn-sm btn-success list-btn-add"></action>
+                <action name="edit" describe="修改模块" type="1" href="/tpl/edit"
+                        css="green icon-pencil bigger-130"></action>
+                <action name="delete" describe="删除模块" type="1" href="/tpl/del"
+                        css="red icon-trash bigger-130" confirm="确定要删除模块？"></action>
+            </actions>
+        </view>
+        <view name="view_sys_role" title="角色管理" rowSize="10" model="model_sys_role">
+            <columns>
+                <column name="id" describe="主键" tag="text" center="true"
+                        width="0" display="true" add="false" edit="false"></column>
+                <column name="code" describe="编号" search="true" required="true"></column>
+                <column name="name" describe="名称" required="true"></column>
+                <column name="status" describe="状态" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="停用" value="0"></item>
+                        <item name="启用" value="1"></item>
+                    </items>
+                </column>
+                <column name="modify_time" describe="修改时间" tag="datetime" add="false"
+                        default="now"></column>
+                <column name="remark" describe="备注"></column>
+            </columns>
+            <actions>
+                <action name="detail" describe="角色详情" type="1" href="/tpl/detail"
+                        css="blue icon-zoom-in bigger-130"></action>
+                <action name="add" describe="添加角色" type="0" href="/tpl/add"
+                        css="btn btn-sm btn-success list-btn-add"></action>
+                <action name="edit" describe="修改角色" type="1" href="/tpl/edit"
+                        css="green icon-pencil bigger-130"></action>
+                <action name="power" describe="角色授权" type="1" href="/role/empower"
+                        css="green icon-legal bigger-130"></action>
+                <action name="delete" describe="删除角色" type="1" href="/tpl/del"
+                        css="red icon-trash bigger-130" confirm="确定要删除角色？"></action>
+            </actions>
+        </view>
+        <view name="view_sys_user" title="管理员" rowsize="10" model="model_sys_user">
+            <columns>
+                <column name="id" describe="主键" tag="text" center="true"
+                        width="0" display="true" search="true" add="false" edit="false"></column>
+                <column name="code" describe="用户名" required="true"></column>
+                <column name="name" describe="姓名" required="true"></column>
+                <column name="password" describe="密码" display="false" tag="password"
+                        add="false" edit="false" default="4ad418256efdfae2d275a9d6a8631df8"></column>
+                <column name="phone" describe="手机号"></column>
+                <column name="email" describe="邮箱"></column>
+                <column name="role_id" describe="角色名称" tag="dataItem" search="true"
+                        required="true">
+                    <dataItem model="model_select_role" key="id" value="name"></dataItem>
+                </column>
+                <column name="status" describe="状态" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="停用" value="0"></item>
+                        <item name="启用" value="1"></item>
+                    </items>
+                </column>
+            </columns>
+            <actions>
+                <action name="detail" describe="管理员详情" type="1" href="/tpl/detail"
+                        css="blue icon-zoom-in bigger-130"></action>
+                <action name="add" describe="添加管理员" type="0" href="/tpl/add"
+                        css="btn btn-sm btn-success list-btn-add"></action>
+                <action name="edit" describe="修改管理员" type="1" href="/tpl/edit"
+                        css="green icon-pencil bigger-130"></action>
+                <action name="chg_psw" describe="修改密码" type="1" href="/user/chg_psw"
+                        css="green icon-key bigger-130"></action>
+                <action name="row_filter" describe="行级过滤" type="1"
+                        href="/user/row_filter" css="green icon-list-ul bigger-130"></action>
+                <action name="delete" describe="删除管理员" type="1" href="/tpl/del"
+                        css="red icon-trash bigger-130"></action>
+            </actions>
+        </view>
+        <view name="view_sys_user_info" title="个人信息" rowsize="10"
+              model="model_sys_user">
+        </view>
+        <!--工作流-->
+        <view name="view_sys_workflow" title="工作流" rowSize="10"
+              model="model_sys_workflow">
+            <columns>
+                <column name="id" describe="主键" tag="text" center="true"
+                        width="0" add="false" edit="false"></column>
+                <column name="code" describe="编号" required="true"></column>
+                <column name="name" describe="名称" required="true"></column>
+                <column name="field" describe="字段名称" required="true"></column>
+                <column name="user_field" describe="修改人字段" required="true"></column>
+                <column name="time_field" describe="修改时间字段" required="true"></column>
+                <column name="status" describe="状态" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="停用" value="0"></item>
+                        <item name="启用" value="1"></item>
+                    </items>
+                </column>
+            </columns>
+            <actions>
+                <action name="detail" describe="工作流详情" type="1" href="/tpl/detail"
+                        css="blue icon-zoom-in bigger-130"></action>
+                <action name="add" describe="添加工作流" type="0" href="/tpl/add"
+                        css="btn btn-sm btn-success list-btn-add"></action>
+                <action name="edit" describe="修改工作流" type="1" href="/tpl/edit"
+                        css="green icon-pencil bigger-130"></action>
+                <action name="delete" describe="删除工作流" type="1" href="/tpl/del"
+                        css="red icon-trash bigger-130"></action>
+            </actions>
+        </view>
+        <view name="view_sys_workflow_step" title="工作流节点" rowSize="10"
+              model="model_sys_workflow_step">
+            <columns>
+                <column name="id" describe="主键" tag="text" center="true"
+                        width="0" add="false" edit="false"></column>
+                <column name="parent_id" describe="工作流" tag="dataItem" default="0"
+                        display="false">
+                    <dataItem model="model_sys_workflow" key="id" value="name"></dataItem>
+                </column>
+                <column name="type" describe="类型" tag="item" default="2"
+                        required="true">
+                    <items>
+                        <item name="起点" value="0"></item>
+                        <item name="终点" value="1"></item>
+                        <item name="节点" value="2"></item>
+                    </items>
+                </column>
+                <column name="last_step_id" describe="上一步节点" tag="dataItem"
+                        default="0" display="false">
+                    <dataItem model="model_sys_workflow_step" key="id" value="name"></dataItem>
+                </column>
+                <column name="parent_name" describe="工作流" add="false" edit="false"></column>
+                <column name="last_step_name" describe="上一步节点" add="false" edit="false"></column>
+                <column name="name" describe="节点名称" required="true"></column>
+                <column name="value" describe="字段值" required="true"></column>
+                <column name="user_names" describe="审核用户"></column>
+                <column name="describe" describe="节点描述"></column>
+            </columns>
+            <actions>
+                <action name="detail" describe="节点详情" type="1" href="/tpl/detail"
+                        css="blue icon-zoom-in bigger-130"></action>
+                <action name="add" describe="添加节点" type="0" href="/tpl/add"
+                        css="btn btn-sm btn-success list-btn-add"></action>
+                <action name="edit" describe="修改节点" type="1" href="/tpl/edit"
+                        css="green icon-pencil bigger-130"></action>
+                <action name="action" describe="编辑审核人" type="1"
+                        href="/workflow/verify_users" css="green icon-legal bigger-130"></action>
+                <action name="delete" describe="删除节点" type="1" href="/tpl/del"
+                        css="red icon-trash bigger-130"></action>
+            </actions>
+        </view>
+        <!--工作流-->
+    </views>
+</root>

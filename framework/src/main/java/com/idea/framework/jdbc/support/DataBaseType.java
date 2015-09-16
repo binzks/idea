@@ -23,7 +23,7 @@ public enum DataBaseType {
      * 根据字符串获取枚举值
      *
      * @param name 枚举值字符串
-     * @return
+     * @return 数据库类型
      */
     public static DataBaseType valueOfString(String name) {
         switch (name.toUpperCase()) {

@@ -5,7 +5,7 @@
 	<short-name>date</short-name>
 	<tag>
 		<name>date</name>
-		<tag-class>org.thinkcms.util.JSTLDateUtils</tag-class>
+		<tag-class>com.idea.cms.util.JSTLDateUtils</tag-class>
 		<attribute>
 			<name>value</name>
 			<required>true</required>

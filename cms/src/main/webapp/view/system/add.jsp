@@ -19,7 +19,7 @@
 						${column.describe} </label>
 					<div class="col-sm-9">
 						<c:choose>
-							<c:when test="${ column.tag=='ITEM' || column.tag=='DATAITEM' }">
+							<c:when test="${ column.tag.toString() == 'ITEM' || column.tag.toString() == 'DATAITEM'}">
 								<select class="select option, select.form-control option"
 									<c:if test="${column.required }">required="required"</c:if>
 									name="${column.name }">
@@ -30,7 +30,7 @@
 									</c:forEach>
 								</select>
 							</c:when>
-							<c:when test="${ column.tag=='DATE' || column.tag=='DATETIME' }">
+							<c:when test="${ column.tag.toString() == 'DATE' || column.tag.toString() == 'DATETIME' }">
 								<div class="form-group">
 									<div class="col-xs-4">
 										<div class="input-group input-group-sm">
@@ -43,12 +43,12 @@
 									</div>
 								</div>
 							</c:when>
-							<c:when test="${column.tag == 'PASSWORD' }">
+							<c:when test="${column.tag.toString() == 'PASSWORD' }">
 								<input type="password" class="col-xs-10 col-sm-5"
 									name="${column.name }"
 									<c:if test="${column.required }">required="required"</c:if> />
 							</c:when>
-							<c:when test="${column.tag == 'INT' }">
+							<c:when test="${column.tag.toString() == 'INT' }">
 								<input type="text" class="col-xs-10 col-sm-5"
 									onkeyup="value=value.replace(/[^\d]/g,'') "
 									onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"

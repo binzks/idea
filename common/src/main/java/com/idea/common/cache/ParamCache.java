@@ -33,7 +33,11 @@ public class ParamCache {
     public void init(Map<String, String> map) {
         this.cacheMap.clear();
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            this.cacheMap.put(entry.getKey(), entry.getValue());
+            String key = entry.getKey();
+            if (null != this.cacheMap.get(key)) {
+                throw new RuntimeException("参数定义[" + key + "]已存在！");
+            }
+            this.cacheMap.put(key, entry.getValue());
         }
     }
 

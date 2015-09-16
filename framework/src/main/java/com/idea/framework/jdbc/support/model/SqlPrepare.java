@@ -1,6 +1,5 @@
 package com.idea.framework.jdbc.support.model;
 
-import javafx.scene.control.Tab;
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Method;
@@ -34,12 +33,12 @@ public class SqlPrepare {
                 tableAliasMap.put(joins.get(i).getName(), TABLE_ALIAS_PREFIX + (i + 1));
             }
             //生成关联sql语句
-            StringBuffer joinBuffer = new StringBuffer();
+            StringBuilder joinBuffer = new StringBuilder();
             for (Join join : joins) {
                 String alias = tableAliasMap.get(join.getName());
-                String joinAlias = tableAliasMap.get(join.getJoinName());
+                String joinAlias = getTableAlias(join.getJoinName());
                 joinBuffer.append(" ").append(join.getType()).append(" `").append(join.getTable()).append("` AS ")
-                        .append(alias).append(" on ").append(alias).append(".").append(join.getKey()).
+                        .append(alias).append(" ON ").append(alias).append(".").append(join.getKey()).
                         append("=").append(joinAlias).append(".").append(join.getJoinKey());
             }
             joinSql = joinBuffer.toString();
@@ -49,7 +48,7 @@ public class SqlPrepare {
     /**
      * 返回关联表sql语句
      *
-     * @return
+     * @return 关联sql语句
      */
     public String getJoinSql() {
         return this.joinSql;
@@ -61,9 +60,9 @@ public class SqlPrepare {
      * @param columns 列定义
      * @return 列的语句块
      */
-    public String getColumnSql(List<Column> columns) {
-        StringBuffer columnBuffer = new StringBuffer();
-        for (Column column : columns) {
+    public String getColumnSql(Map<String, Column> columns) {
+        StringBuilder columnBuffer = new StringBuilder();
+        for (Column column : columns.values()) {
             if (columnBuffer.length() > 0) {
                 columnBuffer.append(",");
             }
@@ -80,7 +79,7 @@ public class SqlPrepare {
      * 根据过滤条件生成，过滤的sql语句和过滤值
      *
      * @param filterList 过滤条件
-     * @return
+     * @return 过滤sql和值
      */
     public SqlValues getFilter(List<Filter> filterList) {
         SqlValues sqlValues = new SqlValues();
@@ -89,7 +88,7 @@ public class SqlPrepare {
             sqlValues.setValues(null);
             return sqlValues;
         }
-        StringBuffer filterBuffer = new StringBuffer();
+        StringBuilder filterBuffer = new StringBuilder();
         List<Object> filterValues = new ArrayList<>();
         for (Filter filter : filterList) {
             filterBuffer.append(" AND ").append(getTableAlias(filter.getJoinName())).append(".").append(filter.getKey())
@@ -121,15 +120,15 @@ public class SqlPrepare {
                         filterValues.add(null);
                     } else {
                         String[] values = filter.getValue().toString().split(",");
-                        StringBuffer in = new StringBuffer();
-                        for (int i = 0; i < values.length; i++) {
+                        StringBuilder in = new StringBuilder();
+                        for (String value : values) {
                             if (in.length() > 0) {
                                 in.append(",");
                             }
                             in.append("?");
-                            filterValues.add(values[i]);
+                            filterValues.add(value);
                         }
-                        filterBuffer.append(filterType).append("(").append(in).append(")");
+                        filterBuffer.append("(").append(in).append(")");
                     }
                     break;
                 default:
@@ -149,13 +148,13 @@ public class SqlPrepare {
      * @param dataMap  map类型数据
      * @param columns  model对应的列
      * @param pkName   model主键名称
-     * @return
+     * @return 新增字段sql和值
      */
-    public SqlValues getInsert(Object instance, Map<String, Object> dataMap, List<Column> columns, String pkName) {
-        StringBuffer colSql = new StringBuffer();
-        StringBuffer valSql = new StringBuffer();
+    public SqlValues getInsert(Object instance, Map<String, Object> dataMap, Map<String, Column> columns, String pkName) {
+        StringBuilder colSql = new StringBuilder();
+        StringBuilder valSql = new StringBuilder();
         List<Object> values = new ArrayList<>();
-        for (Column column : columns) {
+        for (Column column : columns.values()) {
             String tableAlias = getTableAlias(column.getJoinName());
             if (!tableAlias.equals(TABLE_ALIAS_PREFIX)) {
                 continue;
@@ -164,7 +163,7 @@ public class SqlPrepare {
             if (colName.equals(pkName)) {
                 continue;
             }
-            Object value = null;
+            Object value;
             if (null != instance) {
                 value = getFieldValueByName(colName, instance);
             } else {
@@ -193,12 +192,12 @@ public class SqlPrepare {
      * @param isHandleNull null字段是否更新，true是 false不更新
      * @param columns      model对应的列
      * @param pkName       model的主键名称
-     * @return
+     * @return 修改字段sql和值
      */
-    public SqlValues getUpdate(Object instance, Map<String, Object> dataMap, boolean isHandleNull, List<Column> columns, String pkName) {
-        StringBuffer colSql = new StringBuffer();
+    public SqlValues getUpdate(Object instance, Map<String, Object> dataMap, boolean isHandleNull, Map<String, Column> columns, String pkName) {
+        StringBuilder colSql = new StringBuilder();
         List<Object> values = new ArrayList<>();
-        for (Column column : columns) {
+        for (Column column : columns.values()) {
             String tableAlias = getTableAlias(column.getJoinName());
             if (!tableAlias.equals(TABLE_ALIAS_PREFIX)) {
                 continue;
@@ -207,7 +206,7 @@ public class SqlPrepare {
             if (colName.equals(pkName)) {
                 continue;
             }
-            Object value = null;
+            Object value;
             if (null != instance) {
                 value = getFieldValueByName(colName, instance);
             } else {
@@ -221,7 +220,7 @@ public class SqlPrepare {
                 values.add(value);
             }
         }
-        Object pkValue = null;
+        Object pkValue;
         if (null != instance) {
             pkValue = getFieldValueByName(pkName, instance);
         } else {
@@ -252,14 +251,14 @@ public class SqlPrepare {
     /***
      * 生成排序的sql语句
      *
-     * @param orders
-     * @return
+     * @param orders 排序条件
+     * @return 排序sql
      */
     public String getOrderSql(List<Order> orders) {
         if (null == orders) {
             return "";
         } else {
-            StringBuffer orderBuffer = new StringBuffer();
+            StringBuilder orderBuffer = new StringBuilder();
             for (Order order : orders) {
                 if (orderBuffer.length() > 0) {
                     orderBuffer.append(",");
@@ -276,15 +275,14 @@ public class SqlPrepare {
      *
      * @param fieldName 属性名称
      * @param object    取值对象
-     * @return
+     * @return 对象值
      */
     private Object getFieldValueByName(String fieldName, Object object) {
         try {
             String firstLetter = fieldName.substring(0, 1).toUpperCase();
             String getter = "get" + firstLetter + fieldName.substring(1);
-            Method method = object.getClass().getMethod(getter, new Class[]{});
-            Object value = method.invoke(object, new Object[]{});
-            return value;
+            Method method = object.getClass().getMethod(getter);
+            return method.invoke(object);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

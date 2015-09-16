@@ -3,6 +3,7 @@ package com.idea.framework.jdbc.support.model;
 import com.idea.framework.jdbc.support.DataBaseType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhoubin on 15/9/7.
@@ -20,7 +21,7 @@ public class Model {
 
     private String dsName; //model对应的spring数据源bean id
 
-    private List<Column> columns; //model的列定义
+    private Map<String, Column> columns; //model的列定义
 
     private List<Join> joins;  //model的关联定义
 
@@ -68,11 +69,11 @@ public class Model {
         this.dsName = dsName;
     }
 
-    public List<Column> getColumns() {
+    public Map<String, Column> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<Column> columns) {
+    public void setColumns(Map<String, Column> columns) {
         this.columns = columns;
     }
 

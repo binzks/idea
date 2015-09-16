@@ -12,19 +12,19 @@ import java.util.Map;
  * Created by zhoubin on 15/9/9.
  * model的数据缓存，单例模式
  */
-public class ModelCache {
+public class JdbcModelCache {
 
     private Map<String, JdbcModel> cacheMap; //model缓存map
 
     private static class ConfigureHolder {
-        private static ModelCache instance = new ModelCache();
+        private static JdbcModelCache instance = new JdbcModelCache();
     }
 
-    private ModelCache() {
+    private JdbcModelCache() {
         this.cacheMap = new HashMap<>();
     }
 
-    public static ModelCache getInstance() {
+    public static JdbcModelCache getInstance() {
         return ConfigureHolder.instance;
     }
 
@@ -36,8 +36,12 @@ public class ModelCache {
     public void init(List<Model> list) {
         this.cacheMap.clear();
         for (Model model : list) {
+            String key = model.getName();
+            if (null != this.cacheMap.get(key)) {
+                throw new RuntimeException("JdbcModel定义[" + key + "]已存在！");
+            }
             JdbcModel jdbcModel = ModelFactory.getModel(model);
-            this.cacheMap.put(model.getName(), jdbcModel);
+            this.cacheMap.put(key, jdbcModel);
         }
     }
 

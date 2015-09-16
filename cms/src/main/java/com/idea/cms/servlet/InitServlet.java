@@ -1,6 +1,7 @@
 package com.idea.cms.servlet;
 
-import com.idea.cache.core.Configuration;
+
+import com.idea.common.cache.core.Configuration;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

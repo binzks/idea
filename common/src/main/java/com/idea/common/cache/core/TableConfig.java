@@ -1,7 +1,7 @@
 package com.idea.common.cache.core;
 
 import com.google.gson.Gson;
-import com.idea.common.cache.TableCache;
+import com.idea.common.cache.JdbcTableCache;
 import com.idea.common.cache.support.Config;
 import com.idea.framework.jdbc.support.DataBaseType;
 import com.idea.framework.jdbc.support.table.Field;
@@ -26,20 +26,16 @@ public class TableConfig implements Config {
         if (null == root) {
             return;
         }
-        TableCache tableCache = TableCache.getInstance();
         List<Table> list = new ArrayList<>();
         Element tables = root.element("tables");
         for (Iterator i = tables.elementIterator(); i.hasNext(); ) {
             Element element = (Element) i.next();
-            if (null == element) {
-                continue;
-            }
+            String name = element.attributeValue("name");
             List<Field> fields = getFields(element.element("fields"));
             List<Index> indexes = getIndexes(element.element("indexes"));
             List<Object[]> data = getData(element.element("datas"), fields);
             Table table = new Table();
             table.setDataBaseType(DataBaseType.valueOfString(element.attributeValue("type")));
-            String name = element.attributeValue("name");
             table.setName(name);
             table.setComment(element.attributeValue("comment"));
             table.setDsName(element.attributeValue("ds"));
@@ -47,12 +43,9 @@ public class TableConfig implements Config {
             table.setFields(fields);
             table.setIndexes(indexes);
             table.setData(data);
-            if (null != tableCache.get(name)) {
-                throw new RuntimeException("table[" + name + "]已存在重复名称");
-            }
             list.add(table);
         }
-        tableCache.init(list);
+        JdbcTableCache.getInstance().init(list);
         logger.debug("加载table配置：" + new Gson().toJson(list));
     }
 

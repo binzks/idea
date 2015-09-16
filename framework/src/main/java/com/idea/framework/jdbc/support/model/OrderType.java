@@ -14,6 +14,10 @@ public enum OrderType {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
     /***
      * 根据字符串获取枚举值

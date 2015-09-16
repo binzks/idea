@@ -46,7 +46,7 @@ public enum FilterType {
      * 根据字符串获取枚举值
      *
      * @param name 枚举值字符串
-     * @return
+     * @return 过滤类型
      */
     public static FilterType valueOfString(String name) {
         switch (name.toUpperCase()) {

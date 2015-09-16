@@ -32,7 +32,7 @@ public class MysqlTable implements JdbcTable {
     public void initTable() {
         List<Map<String, Object>> list = null;
         try {
-            list = jdbcTemplate.queryForList("describe " + this.table.getName());
+            list = jdbcTemplate.queryForList(String.format("describe %s", this.table.getName()));
         } catch (Exception e) {
             logger.debug("describe " + this.table.getName() + "错误[" + e.getMessage() + "]");
         }
@@ -59,14 +59,13 @@ public class MysqlTable implements JdbcTable {
         if (null == indexes) {
             return;
         }
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         for (Index index : indexes) {
-            sql.append("ALTER TABLE `" + this.table.getName() + "` ADD");
+            sql.append("ALTER TABLE `").append(this.table.getName()).append("` ADD");
             if (index.getType().toUpperCase().equals("UNIQUE")) {
                 sql.append(" UNIQUE ");
             }
-            sql.append(" INDEX `" + index.getName() + "` (" + index.getFields() + ")  COMMENT '"
-                    + index.getComment() + "';");
+            sql.append(" INDEX `").append(index.getName()).append("` (").append(index.getFields()).append(")  COMMENT '").append(index.getComment()).append("';");
         }
         if (sql.length() > 0) {
             logger.debug(sql.toString());
@@ -78,12 +77,12 @@ public class MysqlTable implements JdbcTable {
      * 添加表的默认数据
      */
     private void initTableData() {
-        List<Object[]> datas = this.table.getData();
-        if (null == datas) {
+        List<Object[]> data = this.table.getData();
+        if (null == data) {
             return;
         }
-        StringBuffer colSql = new StringBuffer();
-        StringBuffer valSql = new StringBuffer();
+        StringBuilder colSql = new StringBuilder();
+        StringBuilder valSql = new StringBuilder();
         for (Field field : this.table.getFields()) {
             colSql.append(",`").append(field.getName()).append("`");
             valSql.append(",?");
@@ -92,9 +91,9 @@ public class MysqlTable implements JdbcTable {
             colSql.delete(0, 1);
             valSql.delete(0, 1);
         }
-        String dataSql = "INSERT INTO `" + this.table.getName() + "`(" + colSql + ") VALUES (" + valSql + ")";
+        String dataSql = String.format("INSERT INTO `%s`(%s) VALUES (%s)", this.table.getName(), colSql, valSql);
         logger.debug(dataSql);
-        jdbcTemplate.batchUpdate(dataSql, datas);
+        jdbcTemplate.batchUpdate(dataSql, data);
     }
 
     /***
@@ -143,18 +142,18 @@ public class MysqlTable implements JdbcTable {
      * 根据字段定义获取创建字段的sql语句，其中主键固定为int(11)不可空自增长
      *
      * @param field 表定义的字段
-     * @return
+     * @return 返回字段列表sql
      */
     private String getFieldSql(Field field) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         String name = field.getName();
         if (name.equals(this.table.getPkName())) {
-            sql.append("`" + name + "` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键'");
+            sql.append("`").append(name).append("` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键'");
         } else {
-            sql.append("`" + name + "` " + field.getType());
+            sql.append("`").append(name).append("` ").append(field.getType());
             String size = field.getSize();
             if (null != size) {
-                sql.append("(" + size + ")");
+                sql.append("(").append(size).append(")");
             }
             if (!field.getIsNull()) {
                 sql.append(" NOT NULL");
@@ -164,11 +163,11 @@ public class MysqlTable implements JdbcTable {
                 if (defaultValue.trim().toUpperCase().equals("NULL")) {
                     sql.append(" DEFAULT NULL");
                 } else {
-                    sql.append(" DEFAULT '" + defaultValue + "'");
+                    sql.append(" DEFAULT '").append(defaultValue).append("'");
                 }
             }
             if (StringUtils.isNotBlank(field.getComment())) {
-                sql.append(" COMMENT '" + field.getComment() + "'");
+                sql.append(" COMMENT '").append(field.getComment()).append("'");
             }
         }
         return sql.toString();
@@ -177,19 +176,19 @@ public class MysqlTable implements JdbcTable {
     /***
      * 获取创建表的sql语句
      *
-     * @return
+     * @return 返回创建表的sql语句
      */
     private String getCreateTableSql() {
-        StringBuffer sql = new StringBuffer();
-        sql.append("CREATE TABLE `" + this.table.getName() + "` (");
+        StringBuilder sql = new StringBuilder();
+        sql.append("CREATE TABLE `").append(this.table.getName()).append("` (");
         for (Field field : this.table.getFields()) {
             sql.append(getFieldSql(field));
             sql.append(",");
         }
-        sql.append("PRIMARY KEY (`" + this.table.getPkName() + "`))");
+        sql.append("PRIMARY KEY (`").append(this.table.getPkName()).append("`))");
         String comment = this.table.getComment();
         if (StringUtils.isNotBlank(comment)) {
-            sql.append(" COMMENT='" + comment + "'");
+            sql.append(" COMMENT='").append(comment).append("'");
         }
         return sql.toString();
     }
@@ -197,11 +196,11 @@ public class MysqlTable implements JdbcTable {
     /***
      * 获得修改表的sql语句，只修改字段，不修改索引
      *
-     * @param list
-     * @return
+     * @param list 表的字段列表
+     * @return 修改表的sql语句
      */
     private String getAlertTableSql(List<Map<String, Object>> list) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         String pkName = this.table.getPkName();
         for (Field field : this.table.getFields()) {
             String name = field.getName();
@@ -228,12 +227,12 @@ public class MysqlTable implements JdbcTable {
                 if (sql.length() > 0) {
                     sql.append(",");
                 }
-                sql.append(" ADD " + getFieldSql(field));
+                sql.append(" ADD ").append(getFieldSql(field));
             } else if (fieldSqlType.equals("change")) {
                 if (sql.length() > 0) {
                     sql.append(",");
                 }
-                sql.append(" CHANGE `" + name + "` " + getFieldSql(field));
+                sql.append(" CHANGE `").append(name).append("` ").append(getFieldSql(field));
             }
         }
         if (sql.length() > 0) {

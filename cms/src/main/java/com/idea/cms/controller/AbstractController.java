@@ -8,10 +8,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.idea.cms.support.ModulePermission;
 import com.idea.cms.support.UserSession;
+import com.idea.common.cache.JdbcModelCache;
 import com.idea.common.view.View;
 import com.idea.common.view.ViewColumn;
+import com.idea.framework.jdbc.support.JdbcModel;
 import com.idea.framework.jdbc.support.model.Filter;
 import com.idea.framework.jdbc.support.model.FilterType;
 import org.apache.commons.lang.StringUtils;
@@ -28,21 +31,23 @@ public abstract class AbstractController extends BaseController {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
+            JdbcModel jdbcModel = modulePermission.getJdbcModel();
             // 获取页面查询条件
-            List<Filter> filters = initFilters(model, request, view, modulePermission.getRowFilters());
+            List<Filter> filters = initFilters(model, request, view.getColumns(), jdbcModel.getColumns(), modulePermission.getRowFilters());
+            int totalCount = jdbcModel.getTotalCount(filters);
             // 初始化页面分页信息
-            Integer start = initPages(model, request, view, page, filters);
+            Integer start = initPages(model, request, view, page, totalCount);
             // 获取数据
-            //	List<Map<String, Object>> dataList = view.selectMaps(filters, start, view.getRowSize());
+            List<Map<String, Object>> dataList = modulePermission.getJdbcModel().selectMaps(filters, start, view.getRowSize());
             model.addAttribute("mid", mid);
             model.addAttribute("title", view.getTitle());
             model.addAttribute("baseUrl", this.getClass().getAnnotation(RequestMapping.class).value()[0]);
-            model.addAttribute("pk", view.getPkName());
+            model.addAttribute("pk", modulePermission.getPkName());
             model.addAttribute("powerActions", modulePermission.getActions());
             model.addAttribute("actions", view.getActions());
             model.addAttribute("powerColumns", modulePermission.getColumns());
             model.addAttribute("columns", view.getColumns());
-            //	model.addAttribute("dataList", dataList);
+            model.addAttribute("dataList", dataList);
             return "/system/list";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
@@ -73,15 +78,15 @@ public abstract class AbstractController extends BaseController {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
-            List<Filter> filters = new ArrayList<Filter>();
-            filters.add(new Filter(view.getPkName(), FilterType.Eq, id));
-            //	Map<String, Object> map = view.selectMap(filters);
+            List<Filter> filters = new ArrayList<>();
+            filters.add(new Filter(modulePermission.getPkName(), FilterType.Eq, id));
+            Map<String, Object> map = modulePermission.getJdbcModel().selectMap(filters);
             model.addAttribute("mid", mid);
             model.addAttribute("id", id);
             model.addAttribute("title", view.getTitle());
             model.addAttribute("baseUrl", this.getClass().getAnnotation(RequestMapping.class).value()[0]);
             model.addAttribute("columns", view.getColumns());
-            //	model.addAttribute("data", map);
+            model.addAttribute("data", map);
             return "/system/edit";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
@@ -89,13 +94,23 @@ public abstract class AbstractController extends BaseController {
         }
     }
 
+    /**
+     * 保存数据，如果id为空则新增，否则修改
+     *
+     * @param mid      模块id
+     * @param id       数据id
+     * @param model    页面model
+     * @param request  客户端请求
+     * @param response 客户端请求响应
+     * @return 页面地址
+     */
     @RequestMapping(value = {"save{mid}{id}", "/save{mid}-{id}"}, method = RequestMethod.POST)
     public String saveData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
                            HttpServletResponse response) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
-            String pkName = view.getPkName();
+            String pkName = modulePermission.getPkName();
             String baseUrl = this.getClass().getAnnotation(RequestMapping.class).value()[0];
             List<ViewColumn> columns = view.getColumns();
             Map<String, Object> dataMap = new HashMap<>();
@@ -104,19 +119,20 @@ public abstract class AbstractController extends BaseController {
                 if (columnName.equals(pkName)) {
                     continue;
                 }
-                Object value = request.getParameter(columnName);
+                String value = request.getParameter(columnName);
                 // 如果是新增数据，则填入默认值，如果是修改数据则不处理null数据
-                if (StringUtils.isBlank(id) && null == value) {
+                if (StringUtils.isBlank(id) && StringUtils.isBlank(value)) {
                     value = getDefaultValue(viewColumn.getDefaultValue(),
                             (UserSession) request.getSession().getAttribute("session_user"));
                 }
                 dataMap.put(viewColumn.getName(), value);
             }
+            JdbcModel jdbcModel = modulePermission.getJdbcModel();
             if (StringUtils.isNotBlank(id)) {
                 dataMap.put(pkName, id);
-                //	view.update(dataMap);
+                jdbcModel.update(dataMap);
             } else {
-                //	view.insert(dataMap);
+                jdbcModel.insert(dataMap);
             }
             return "redirect:" + baseUrl + "/list" + mid + ".html";
         } catch (Exception e) {
@@ -125,11 +141,18 @@ public abstract class AbstractController extends BaseController {
         }
     }
 
-    private Object getDefaultValue(String value, UserSession userSession) {
+    /**
+     * 获取view定义的默认值
+     *
+     * @param value       默认值
+     * @param userSession 登录用户session
+     * @return 返回真实默认值
+     */
+    private String getDefaultValue(String value, UserSession userSession) {
         if (null == value) {
             return null;
         } else if (value.equals("now")) {
-            return System.currentTimeMillis() / 1000;
+            return String.valueOf(System.currentTimeMillis() / 1000);
         } else if (value.equals("user.id")) {
             return userSession.getId();
         } else if (value.equals("user.name")) {
@@ -139,19 +162,29 @@ public abstract class AbstractController extends BaseController {
         }
     }
 
+    /**
+     * 获取数据详细内容
+     *
+     * @param mid      模块id
+     * @param id       数据id
+     * @param model    页面model
+     * @param request  请求
+     * @param response 请求响应
+     * @return 返回页面地址
+     */
     @RequestMapping(value = "/detail{mid}-{id}")
     public String detailData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
                              HttpServletResponse response) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
-            List<Filter> filters = new ArrayList<Filter>();
-            filters.add(new Filter(view.getPkName(), FilterType.Eq, id));
-            //Map<String, Object> map = view.selectMap(filters);
+            List<Filter> filters = new ArrayList<>();
+            filters.add(new Filter(modulePermission.getPkName(), FilterType.Eq, id));
+            Map<String, Object> map = modulePermission.getJdbcModel().selectMap(filters);
             model.addAttribute("title", view.getTitle());
             model.addAttribute("columns", view.getColumns());
             model.addAttribute("powerColumns", modulePermission.getColumns());
-            //model.addAttribute("data", map);
+            model.addAttribute("data", map);
             return "/system/detail";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
@@ -159,16 +192,29 @@ public abstract class AbstractController extends BaseController {
         }
     }
 
+    /***
+     * 删除数据
+     *
+     * @param mid      模块id
+     * @param id       数据id
+     * @param model    写入页面model
+     * @param request  客户端请求
+     * @param response 客户端返回
+     * @return 返回页面地址
+     */
     @RequestMapping(value = "/del{mid}-{id}", method = RequestMethod.POST)
     public String delData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
                           HttpServletResponse response) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
-//            if (view.getBackupOnDel()) {
-//                backUpDelData(view, mid, id);
-//            }
-            //	view.deleteById(id);
+            List<Filter> filters = new ArrayList<>();
+            JdbcModel jdbcModel = modulePermission.getJdbcModel();
+            filters.add(new Filter(modulePermission.getPkName(), FilterType.Eq, id));
+            Map<String, Object> map = jdbcModel.selectMap(filters, "*");
+            String data = new Gson().toJson(map);
+            backUpDelData(mid, view.getName(), jdbcModel.getTableName(), data);
+            modulePermission.getJdbcModel().deleteById(id);
             return "redirect:" + this.getClass().getAnnotation(RequestMapping.class).value()[0] + "/list" + mid
                     + ".html";
         } catch (Exception e) {

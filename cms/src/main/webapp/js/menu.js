@@ -19,7 +19,7 @@ function initMenu() {
 function getMenu(data, pid) {
 	var content = "";
 	for (var i = 0; i < data.length; i++) {
-		if (data[i].parentid == pid) {
+		if (data[i].parent_id == pid) {
 			if (data[i].type == 0) { // 模块组
 				content += '<li><a href="#" class="dropdown-toggle">';
 				content += '<i class=" + ' + data[i].icon + ' + "></i>';
