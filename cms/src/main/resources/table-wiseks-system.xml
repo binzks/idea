@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="table">
+    <tables>
+        <table type="mysql" name="wiseks_sys_platform" comment="平台" ds="wiseks" pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="code" comment="编号" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="name" comment="名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
+                       isnull="false"></field>
+            </fields>
+            <indexes>
+                <index name="index_code" type="UNIQUE" comment="编号唯一索引"
+                       fields="code"></index>
+            </indexes>
+            <datas>
+                <data id="1" code="ios" name="苹果客户端" status="1"></data>
+                <data id="2" code="android" name="安卓客户端" status="1"></data>
+                <data id="3" code="web" name="网站" status="1"></data>
+            </datas>
+        </table>
+
+        <table type="mysql" name="wiseks_sys_html5_module" comment="Html5模块" ds="wiseks" pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="icon" comment="图标地址" type="varchar" size="255"
+                       isnull="false"></field>
+                <field name="name" comment="名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="display" comment="显示 0-否 1-是" type="int" size="11"
+                       isnull="false"></field>
+                <field name="delete" comment="可删除 0-否 1-是" type="int" size="11"
+                       isnull="false"></field>
+                <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
+                       isnull="false"></field>
+                <field name="user_id" comment="修改人id" type="int" size="11"
+                       isnull="false"></field>
+                <field name="modify_time" comment="修改时间" type="varchar" size="20"></field>
+            </fields>
+            <indexes>
+                <index name="index_name" type="UNIQUE" comment="名称唯一索引"
+                       fields="name"></index>
+            </indexes>
+        </table>
+    </tables>
+</root>

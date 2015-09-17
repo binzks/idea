@@ -25,13 +25,19 @@ public class ParamCache {
         return ConfigureHolder.instance;
     }
 
+    /***
+     * 清理所有的缓存数据
+     */
+    public void clear() {
+        this.cacheMap.clear();
+    }
+
     /**
      * 初始化参数定义缓存
      *
      * @param map
      */
     public void init(Map<String, String> map) {
-        this.cacheMap.clear();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String key = entry.getKey();
             if (null != this.cacheMap.get(key)) {

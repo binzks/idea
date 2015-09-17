@@ -24,13 +24,19 @@ public class ErrorCache {
         return ConfigureHolder.instance;
     }
 
+    /***
+     * 清理所有的缓存数据
+     */
+    public void clear() {
+        this.cacheMap.clear();
+    }
+
     /**
      * 初始化错误定义缓存
      *
      * @param map
      */
     public void init(Map<String, String> map) {
-        this.cacheMap.clear();
         for (Entry<String, String> entry : map.entrySet()) {
             String key = entry.getKey();
             if (null != this.cacheMap.get(key)) {

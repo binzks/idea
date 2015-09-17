@@ -122,6 +122,7 @@
                 <column name="code" describe="编号" required="true"></column>
                 <column name="name" describe="名称" required="true"></column>
                 <column name="field" describe="字段名称" required="true"></column>
+                <column name="refuse_value" describe="拒绝状态值" required="true"></column>
                 <column name="user_field" describe="修改人字段" required="true"></column>
                 <column name="time_field" describe="修改时间字段" required="true"></column>
                 <column name="status" describe="状态" tag="item" default="1"
@@ -168,7 +169,7 @@
                 <column name="last_step_name" describe="上一步节点" add="false" edit="false"></column>
                 <column name="name" describe="节点名称" required="true"></column>
                 <column name="value" describe="字段值" required="true"></column>
-                <column name="user_names" describe="审核用户"></column>
+                <column name="user_names" describe="审核用户" add="false" edit="false"></column>
                 <column name="describe" describe="节点描述"></column>
             </columns>
             <actions>

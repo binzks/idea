@@ -26,8 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public abstract class AbstractController extends BaseController {
 
     @RequestMapping(value = {"/list{mid}{page}", "/list{mid}-{page}"})
-    public String getList(@PathVariable String mid, @PathVariable Integer page, Model model, HttpServletRequest request,
-                          HttpServletResponse response) {
+    public String getList(@PathVariable String mid, @PathVariable Integer page, Model model, HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
@@ -39,6 +38,7 @@ public abstract class AbstractController extends BaseController {
             Integer start = initPages(model, request, view, page, totalCount);
             // 获取数据
             List<Map<String, Object>> dataList = modulePermission.getJdbcModel().selectMaps(filters, start, view.getRowSize());
+            int optWidth = view.getActions().size() * 23;
             model.addAttribute("mid", mid);
             model.addAttribute("title", view.getTitle());
             model.addAttribute("baseUrl", this.getClass().getAnnotation(RequestMapping.class).value()[0]);
@@ -47,17 +47,17 @@ public abstract class AbstractController extends BaseController {
             model.addAttribute("actions", view.getActions());
             model.addAttribute("powerColumns", modulePermission.getColumns());
             model.addAttribute("columns", view.getColumns());
+            model.addAttribute("optWidth", optWidth);
             model.addAttribute("dataList", dataList);
-            return "/system/list";
+            return "/system/template/list";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
     @RequestMapping(value = "/add{mid}")
-    public String addData(@PathVariable String mid, Model model, HttpServletRequest request,
-                          HttpServletResponse response) {
+    public String addData(@PathVariable String mid, Model model, HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
@@ -65,16 +65,15 @@ public abstract class AbstractController extends BaseController {
             model.addAttribute("baseUrl", this.getClass().getAnnotation(RequestMapping.class).value()[0]);
             model.addAttribute("title", view.getTitle());
             model.addAttribute("columns", view.getColumns());
-            return "/system/add";
+            return "/system/template/add";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
     @RequestMapping(value = "/edit{mid}-{id}")
-    public String editData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
-                           HttpServletResponse response) {
+    public String editData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
@@ -87,10 +86,10 @@ public abstract class AbstractController extends BaseController {
             model.addAttribute("baseUrl", this.getClass().getAnnotation(RequestMapping.class).value()[0]);
             model.addAttribute("columns", view.getColumns());
             model.addAttribute("data", map);
-            return "/system/edit";
+            return "/system/template/edit";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -101,12 +100,10 @@ public abstract class AbstractController extends BaseController {
      * @param id       数据id
      * @param model    页面model
      * @param request  客户端请求
-     * @param response 客户端请求响应
      * @return 页面地址
      */
     @RequestMapping(value = {"save{mid}{id}", "/save{mid}-{id}"}, method = RequestMethod.POST)
-    public String saveData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
-                           HttpServletResponse response) {
+    public String saveData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
@@ -120,8 +117,8 @@ public abstract class AbstractController extends BaseController {
                     continue;
                 }
                 String value = request.getParameter(columnName);
-                // 如果是新增数据，则填入默认值，如果是修改数据则不处理null数据
-                if (StringUtils.isBlank(id) && StringUtils.isBlank(value)) {
+                // 如果数据为null或者空则填入默认值
+                if (StringUtils.isBlank(value)) {
                     value = getDefaultValue(viewColumn.getDefaultValue(),
                             (UserSession) request.getSession().getAttribute("session_user"));
                 }
@@ -137,7 +134,7 @@ public abstract class AbstractController extends BaseController {
             return "redirect:" + baseUrl + "/list" + mid + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -185,10 +182,10 @@ public abstract class AbstractController extends BaseController {
             model.addAttribute("columns", view.getColumns());
             model.addAttribute("powerColumns", modulePermission.getColumns());
             model.addAttribute("data", map);
-            return "/system/detail";
+            return "/system/template/detail";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -219,7 +216,7 @@ public abstract class AbstractController extends BaseController {
                     + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 

@@ -29,12 +29,18 @@ public class JdbcTableCache {
     }
 
     /***
+     * 清理所有的缓存数据
+     */
+    public void clear() {
+        this.cacheMap.clear();
+    }
+
+    /***
      * 初始化table缓存，先清除原先的table
      *
      * @param list
      */
     public void init(List<Table> list) {
-        this.cacheMap.clear();
         for (Table table : list) {
             String key = table.getName();
             if (null != this.cacheMap.get(key)) {

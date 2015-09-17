@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="view">
+    <views>
+        <view name="view_wiseks_sys_platform" title="平台" rowSize="10" model="model_wiseks_sys_platform">
+            <columns>
+                <column name="id" describe="主键" tag="text" center="true" add="false" edit="false"></column>
+                <column name="code" describe="编号" required="true"></column>
+                <column name="name" describe="名称" search="true" required="true"></column>
+                <column name="status" describe="状态" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="停用" value="0"></item>
+                        <item name="启用" value="1"></item>
+                    </items>
+                </column>
+            </columns>
+            <actions>
+                <action name="detail" describe="平台详情" type="1" href="/tpl/detail"
+                        css="blue icon-zoom-in bigger-130"></action>
+                <action name="add" describe="添加平台" type="0" href="/tpl/add"
+                        css="btn btn-sm btn-success list-btn-add"></action>
+                <action name="edit" describe="修改平台" type="1" href="/tpl/edit"
+                        css="green icon-pencil bigger-130"></action>
+                <action name="delete" describe="删除平台" type="1" href="/tpl/del"
+                        css="red icon-trash bigger-130" confirm="确定要删除平台？"></action>
+            </actions>
+        </view>
+        <view name="view_wiseks_sys_html5_module" title="Html5模块" rowSize="10" model="model_wiseks_sys_html5_module">
+            <columns>
+                <column name="id" describe="主键" tag="text" center="true" add="false" edit="false"></column>
+                <column name="icon" describe="图标" tag="image"></column>
+                <column name="name" describe="名称" search="true" required="true"></column>
+                <column name="display" describe="显示" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="否" value="0"></item>
+                        <item name="是" value="1"></item>
+                    </items>
+                </column>
+                <column name="delete" describe="可删除" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="否" value="0"></item>
+                        <item name="是" value="1"></item>
+                    </items>
+                </column>
+                <column name="status" describe="状态" tag="item" default="1"
+                        required="true">
+                    <items>
+                        <item name="拒绝" value="0"></item>
+                        <item name="录入" value="1"></item>
+                        <item name="审核通过" value="2"></item>
+                        <item name="待审核" value="3"></item>
+                        <item name="主管审核通过" value="4"></item>
+                    </items>
+                </column>
+                <column name="user_id" describe="修改人id" tag="dataItem">
+                    <dataItem model="model_select_user" key="id" value="name"></dataItem>
+                </column>
+                <column name="modify_time" describe="修改时间" tag="datetime"></column>
+            </columns>
+            <actions>
+                <action name="detail" describe="模块详情" type="1" href="/tpl/detail"
+                        css="blue icon-zoom-in bigger-130"></action>
+                <action name="add" describe="添加模块" type="0" href="/tpl/add"
+                        css="btn btn-sm btn-success list-btn-add"></action>
+                <action name="edit" describe="修改模块" type="1" href="/tpl/edit"
+                        css="green icon-pencil bigger-130"></action>
+            </actions>
+        </view>
+    </views>
+</root>

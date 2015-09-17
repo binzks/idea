@@ -78,7 +78,6 @@
                 <column name="name"></column>
             </columns>
         </model>
-        <model type="mysql" name="model_sys_platform" ds="idea" table="idea_sys_platform" pk="id"></model>
         <model type="mysql" name="model_sys_user_row_filter" ds="idea" table="idea_sys_user_row_filter" pk="id"></model>
         <!--工作流-->
         <model type="mysql" name="model_sys_workflow" ds="idea" table="idea_sys_workflow" pk="id"></model>
@@ -126,5 +125,12 @@
         </model>
         <model type="mysql" name="model_sys_workflow_log" ds="idea" table="idea_sys_workflow_log" pk="id"></model>
         <!--工作流-->
+        <model type="mysql" name="model_select_user" ds="idea" table="idea_sys_user" pk="id">
+            <filters>
+                <filter key="status" type="=" value="1"></filter>
+            </filters>
+            <column name="id"></column>
+            <column name="name"></column>
+        </model>
     </models>
 </root>

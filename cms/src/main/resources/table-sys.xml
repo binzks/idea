@@ -44,10 +44,13 @@
                 <data id="8" name="节点管理" parent_id="2" type="1" url="/tpl/list8"
                       view_code="view_sys_workflow_step" status="1" icon="icon-list"
                       order="5" remark=""></data>
-                <data id="9" name="资讯" parent_id="0" type="0" url="" view_code=""
+                <data id="9" name="系统配置" parent_id="0" type="0" url="" view_code=""
                       status="1" icon="icon-list" order="0" remark=""></data>
-                <data id="10" name="资讯栏目" parent_id="9" type="1" url="/tpl/list10"
-                      view_code="view_news_type" status="1" icon="icon-list" order="5"
+                <data id="10" name="平台管理" parent_id="9" type="1" url="/tpl/list10"
+                      view_code="view_wiseks_sys_platform" status="1" icon="icon-list" order="1"
+                      remark=""></data>
+                <data id="11" name="Html5模块" parent_id="9" type="1" url="/tpl/list11"
+                      view_code="view_wiseks_sys_html5_module" status="1" icon="icon-list" order="1"
                       remark=""></data>
             </datas>
         </table>
@@ -69,7 +72,7 @@
                        fields="`code`"></index>
             </indexes>
             <datas>
-                <data id="1" code="root" name="初始化管理员" module_ids=",1,2,3,4,5,6,7,8,9,10,"
+                <data id="1" code="root" name="初始化管理员" module_ids=",1,2,3,4,5,6,7,8,9,10,11,"
                       status="1"></data>
             </datas>
         </table>
@@ -170,26 +173,6 @@
                 <field name="data" comment="删除的数据" type="text"></field>
             </fields>
         </table>
-        <table type="mysql" name="idea_sys_platform" comment="平台" ds="idea" pk="id">
-            <fields>
-                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
-                <field name="code" comment="编号" type="varchar" size="50"
-                       isnull="false"></field>
-                <field name="name" comment="名称" type="varchar" size="50"
-                       isnull="false"></field>
-                <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
-                       isnull="false"></field>
-            </fields>
-            <indexes>
-                <index name="index_code" type="UNIQUE" comment="编号唯一索引"
-                       fields="code"></index>
-            </indexes>
-            <datas>
-                <data id="1" code="ios" name="苹果客户端" status="1"></data>
-                <data id="2" code="android" name="安卓客户端" status="1"></data>
-                <data id="3" code="web" name="网站" status="1"></data>
-            </datas>
-        </table>
         <!--工作流表-->
         <table type="mysql" name="idea_sys_workflow" comment="工作流" ds="idea" pk="id">
             <fields>
@@ -199,6 +182,8 @@
                 <field name="name" comment="名称" type="varchar" size="50"
                        isnull="false"></field>
                 <field name="field" comment="字段名称" type="varchar" size="50"
+                       isnull="false"></field>
+                <field name="refuse_value" comment="拒绝状态值" type="varchar" size="50"
                        isnull="false"></field>
                 <field name="user_field" comment="修改人字段名" type="varchar" size="50"
                        isnull="false"></field>

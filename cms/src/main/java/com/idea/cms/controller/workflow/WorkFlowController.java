@@ -13,6 +13,7 @@ import com.idea.cms.support.ModulePermission;
 import com.idea.cms.support.UserSession;
 import com.idea.common.cache.JdbcModelCache;
 import com.idea.common.view.View;
+import com.idea.framework.jdbc.support.JdbcModel;
 import com.idea.framework.jdbc.support.model.Filter;
 import com.idea.framework.jdbc.support.model.FilterType;
 import org.apache.commons.lang.StringUtils;
@@ -30,30 +31,32 @@ public class WorkFlowController extends BaseController {
     private Logger logger = Logger.getLogger(WorkFlowController.class);
 
     @RequestMapping(value = {"/list{mid}{page}", "/list{mid}-{page}"})
-    public String getList(@PathVariable String mid, @PathVariable Integer page, Model model, HttpServletRequest request,
-                          HttpServletResponse response) {
+    public String getList(@PathVariable String mid, @PathVariable Integer page, Model model, HttpServletRequest request) {
         try {
-//			ModulePermission modulePermission = getModulePermission(mid, request);
-//			View view = modulePermission.getView();
-//			// 获取页面查询条件
-//			List<Filter> filters = initFilters(model, request, view, modulePermission.getRowFilters());
-//			// 初始化页面分页信息
-//			Integer start = initPages(model, request, view, page, filters);
-//			// 获取数据
-//			List<Map<String, Object>> dataList = view.selectMaps(filters, start, view.getRowSize());
-//			model.addAttribute("mid", mid);
-//			model.addAttribute("title", view.getTitle());
-//			model.addAttribute("baseUrl", this.getClass().getAnnotation(RequestMapping.class).value()[0]);
-//			model.addAttribute("pk", view.getPkName());
-//			model.addAttribute("powerActions", modulePermission.getActions());
-//			model.addAttribute("actions", view.getActions());
-//			model.addAttribute("powerColumns", modulePermission.getColumns());
-//			model.addAttribute("columns", view.getColumns());
-//			model.addAttribute("dataList", dataList);
+            ModulePermission modulePermission = getModulePermission(mid, request);
+            View view = modulePermission.getView();
+            JdbcModel jdbcModel = modulePermission.getJdbcModel();
+            // 获取页面查询条件
+            List<Filter> filters = initFilters(model, request, view.getColumns(), jdbcModel.getColumns(), modulePermission.getRowFilters());
+            int totalCount = jdbcModel.getTotalCount(filters);
+            // 初始化页面分页信息
+            Integer start = initPages(model, request, view, page, totalCount);
+            // 获取数据
+            List<Map<String, Object>> dataList = modulePermission.getJdbcModel().selectMaps(filters, start, view.getRowSize());
+            model.addAttribute("mid", mid);
+            model.addAttribute("title", view.getTitle());
+            model.addAttribute("baseUrl", this.getClass().getAnnotation(RequestMapping.class).value()[0]);
+            model.addAttribute("pk", modulePermission.getPkName());
+            model.addAttribute("powerActions", modulePermission.getActions());
+            model.addAttribute("actions", view.getActions());
+            model.addAttribute("powerColumns", modulePermission.getColumns());
+            model.addAttribute("columns", view.getColumns());
+            model.addAttribute("optWidth", 140);
+            model.addAttribute("dataList", dataList);
             return "/system/workflow/list";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -71,7 +74,7 @@ public class WorkFlowController extends BaseController {
             return "system/workflow/verifyUsers";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -88,7 +91,7 @@ public class WorkFlowController extends BaseController {
             return "redirect:" + "/tpl/list" + mid + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -161,11 +164,11 @@ public class WorkFlowController extends BaseController {
             return "redirect:" + baseUrl + "/list" + mid + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
-    @RequestMapping(value = "/flowlog{mid}-{id}")
+    @RequestMapping(value = "/flow_log{mid}-{id}")
     public String flowlog(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
                           HttpServletResponse response) {
         try {
@@ -181,7 +184,7 @@ public class WorkFlowController extends BaseController {
                     + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 

@@ -12,5 +12,5 @@ public interface Config {
      *
      * @param root
      */
-    public void init(Element root);
+    void init(Element root);
 }

@@ -27,12 +27,18 @@ public class ViewCache {
     }
 
     /***
+     * 清理所有的缓存数据
+     */
+    public void clear() {
+        this.cacheMap.clear();
+    }
+
+    /***
      * 初始化view缓存，先清除原先的view
      *
      * @param list
      */
     public void init(List<View> list) {
-        this.cacheMap.clear();
         for (View view : list) {
             String key = view.getName();
             if (null != this.cacheMap.get(key)) {

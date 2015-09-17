@@ -1,5 +1,7 @@
 package com.idea.common.cache.core;
 
+import com.idea.common.cache.*;
+import com.idea.common.cache.support.Config;
 import com.idea.common.cache.support.ConfigFactory;
 import com.idea.common.cache.support.ConfigType;
 import org.apache.commons.lang.StringUtils;
@@ -27,12 +29,11 @@ public class Configuration {
         if (StringUtils.isBlank(path)) {
             return;
         }
-
+        clearCache();
         try {
             File dir = new File(path);
             File[] files = dir.listFiles();
-            List<Element> list = new ArrayList<>();
-            Map<ConfigType, Element> map = new HashMap<>();
+            Map<Element, Config> map = new HashMap<>();
             //如果有table配置，先读取table配置
             for (File file : files) {
                 if (file.getName().toLowerCase().endsWith(".xml")) {
@@ -41,21 +42,33 @@ public class Configuration {
                     String type = root.attributeValue("type");
                     if (StringUtils.isNotBlank(type)) {
                         ConfigType configType = ConfigType.valueOfString(type);
+                        Config config = ConfigFactory.getConfig(configType);
                         if (ConfigType.Table == configType) {
-                            ConfigFactory.getConfig(configType).init(root);
+                            config.init(root);
                         } else {
-                            map.put(configType, root);
+                            map.put(root, config);
                         }
                     }
                 }
             }
             // 加载所有除了table的配置项
-            for (Entry<ConfigType, Element> entry : map.entrySet()) {
-                ConfigFactory.getConfig(entry.getKey()).init(entry.getValue());
+            for (Entry<Element, Config> entry : map.entrySet()) {
+                entry.getValue().init(entry.getKey());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /***
+     * 清除所有缓存数据
+     */
+    public static void clearCache() {
+        ErrorCache.getInstance().clear();
+        JdbcModelCache.getInstance().clear();
+        JdbcTableCache.getInstance().clear();
+        ParamCache.getInstance().clear();
+        ViewCache.getInstance().clear();
     }
 
 

@@ -29,12 +29,18 @@ public class JdbcModelCache {
     }
 
     /***
+     * 清理所有的缓存数据
+     */
+    public void clear() {
+        this.cacheMap.clear();
+    }
+
+    /***
      * 初始化model缓存，先清除原先的model
      *
      * @param list
      */
     public void init(List<Model> list) {
-        this.cacheMap.clear();
         for (Model model : list) {
             String key = model.getName();
             if (null != this.cacheMap.get(key)) {

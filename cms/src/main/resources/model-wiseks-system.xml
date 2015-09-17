@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root type="model">
+    <models>
+        <model type="mysql" name="model_wiseks_sys_platform" ds="wiseks" table="wiseks_sys_platform" pk="id"></model>
+        <model type="mysql" name="model_wiseks_sys_html5_module" ds="wiseks" table="wiseks_sys_html5_module" pk="id"></model>
+    </models>
+</root>

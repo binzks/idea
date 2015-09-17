@@ -12,6 +12,16 @@
 <body>
 <form class="form-horizontal" role="form"
       action="${baseUrl }/save${mid}-${id }.html" method="post">
+    <script language="javascript">
+        jQuery(function ($) {
+            /* 时间选择 */
+            $('input[id=date-range-picker]').daterangepicker().prev().on(
+                    ace.click_event, function () {
+                        $(this).next().focus();
+                    });
+
+        });
+    </script>
     <c:forEach var="column" items="${columns}">
         <c:if test="${column.add }">
             <div class="form-group">
