@@ -9,6 +9,7 @@
                 <field name="parent_id" comment="父id" type="int" size="11"></field>
                 <field name="type" comment="类型 0-模块组 1-模块" type="int" size="11"
                        isnull="false"></field>
+                <field name="workflow_id" comment="工作流id" type="int" size="11"></field>
                 <field name="url" comment="链接" type="varchar" size="255"></field>
                 <field name="view_code" comment="View编号" type="varchar" size="50"></field>
                 <field name="status" comment="状态 0-停用 1-启用" type="int" size="11"
@@ -183,8 +184,6 @@
                        isnull="false"></field>
                 <field name="field" comment="字段名称" type="varchar" size="50"
                        isnull="false"></field>
-                <field name="refuse_value" comment="拒绝状态值" type="varchar" size="50"
-                       isnull="false"></field>
                 <field name="user_field" comment="修改人字段名" type="varchar" size="50"
                        isnull="false"></field>
                 <field name="time_field" comment="时间字段名" type="varchar" size="50"
@@ -224,8 +223,7 @@
                pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
-                <field name="workflow_code" comment="工作流编号" type="varchar"
-                       size="50" isnull="false"></field>
+                <field name="workflow_id" comment="工作流id" type="int" size="11" isnull="false"></field>
                 <field name="module_id" comment="模块id" type="int" size="11"
                        isnull="false"></field>
                 <field name="data_id" comment="数据id" type="int" size="11"

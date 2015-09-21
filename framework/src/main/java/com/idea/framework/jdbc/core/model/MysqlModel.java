@@ -274,6 +274,11 @@ public class MysqlModel implements JdbcModel {
     }
 
     @Override
+    public List<Map<String, Object>> selectMaps(List<Filter> filters, List<Order> orders) {
+        return selectMaps(filters, orders, this.columnSql, 0, 0);
+    }
+
+    @Override
     public List<Map<String, Object>> selectMaps(List<Filter> filters, List<Order> orders, String columns, int begin, int size) {
         SqlValues sqlValues = getSelect(filters, orders, columns, begin, size);
         String sql = sqlValues.getSql();

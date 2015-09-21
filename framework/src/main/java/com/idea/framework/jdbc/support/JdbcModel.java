@@ -233,6 +233,15 @@ public interface JdbcModel {
      *
      * @param filters 过滤条件
      * @param orders  排序
+     * @return 返回数据列表
+     */
+    List<Map<String, Object>> selectMaps(List<Filter> filters, List<Order> orders);
+
+    /**
+     * 获取数据，如果没有数据则返回null
+     *
+     * @param filters 过滤条件
+     * @param orders  排序
      * @param columns 要查询的字段，多个,隔开 *表示全部
      * @param begin   开始数据行
      * @param size    查询数量，0表示不限制

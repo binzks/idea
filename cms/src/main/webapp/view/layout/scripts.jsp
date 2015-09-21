@@ -26,8 +26,6 @@
 <script src="/assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
 <script src="/assets/js/fuelux/fuelux.tree.min.js"></script>
 <!-- date-range-picker -->
-<script src="/js/date-time/moment.js"></script>
-<script src="/js/date-time/daterangepicker.min.js"></script>
 <script src="/js/My97DatePicker/datalg.js"></script>
 <script src="/js/My97DatePicker/WdatePicker.js"></script>
 <script src="/js/My97DatePicker/calendar.js"></script>

@@ -12,16 +12,6 @@
 <body>
 <form class="form-horizontal" role="form"
       action="${baseUrl }/save${mid}-${id }.html" method="post">
-    <script language="javascript">
-        jQuery(function ($) {
-            /* 时间选择 */
-            $('input[id=date-range-picker]').daterangepicker().prev().on(
-                    ace.click_event, function () {
-                        $(this).next().focus();
-                    });
-
-        });
-    </script>
     <c:forEach var="column" items="${columns}">
         <c:if test="${column.add }">
             <div class="form-group">
@@ -45,12 +35,9 @@
                             <div class="form-group">
                                 <div class="col-xs-4">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" id="datepicker"
-                                               name="${column.name }" readonly="readonly"
+                                        <input type="text" class="form-control" id="datetime-picker"
+                                               name="${column.name }" readonly="readonly" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})
                                                value="${data.get(column.name) }" placeholder="选择时间">
-											<span class="input-group-addon"> <i
-                                                    class="icon-calendar"></i>
-											</span>
                                     </div>
                                 </div>
                             </div>

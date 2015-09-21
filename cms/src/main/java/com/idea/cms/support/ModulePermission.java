@@ -15,12 +15,7 @@ public class ModulePermission {
     private Map<String, String> actions; // 用户模块的按钮权限，有值的说明没有权限
     private Map<String, String> columns; // 用户模块的列权限，有值的说明没有权限
     private Map<String, String> rowFilters; // 用户模块对应的行级权限，有值的说明有权限
-    private String workFlowField;// 工作流对应状态字段名称
-    private String workFlowUserField; // 工作流修改用户字段名称
-    private String workFlowTimeField; // 工作流修改时间字段名称
-    private String workFlowValues; // 有权限工作流节点值
-    private Map<String, String> workFlowStep; // 工作流流程步骤，工作流对应的value值和工作流节点的类型（0-起点
-    // 1-过程点 2-终点）map
+    private WorkFlow workFlow;  //模块对应的工作流权限
 
     public String getModelName() {
         return modelName;
@@ -78,43 +73,11 @@ public class ModulePermission {
         this.rowFilters = rowFilters;
     }
 
-    public String getWorkFlowField() {
-        return workFlowField;
+    public WorkFlow getWorkFlow() {
+        return workFlow;
     }
 
-    public void setWorkFlowField(String workFlowField) {
-        this.workFlowField = workFlowField;
-    }
-
-    public String getWorkFlowUserField() {
-        return workFlowUserField;
-    }
-
-    public void setWorkFlowUserField(String workFlowUserField) {
-        this.workFlowUserField = workFlowUserField;
-    }
-
-    public String getWorkFlowTimeField() {
-        return workFlowTimeField;
-    }
-
-    public void setWorkFlowTimeField(String workFlowTimeField) {
-        this.workFlowTimeField = workFlowTimeField;
-    }
-
-    public String getWorkFlowValues() {
-        return workFlowValues;
-    }
-
-    public void setWorkFlowValues(String workFlowValues) {
-        this.workFlowValues = workFlowValues;
-    }
-
-    public Map<String, String> getWorkFlowStep() {
-        return workFlowStep;
-    }
-
-    public void setWorkFlowStep(Map<String, String> workFlowStep) {
-        this.workFlowStep = workFlowStep;
+    public void setWorkFlow(WorkFlow workFlow) {
+        this.workFlow = workFlow;
     }
 }

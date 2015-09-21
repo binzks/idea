@@ -12,6 +12,12 @@
 <body>
 <form action="${baseUrl }/list${mid}.html" method="post" id="list_form"
       name="list_form">
+    <script language="javascript">
+        function page(action) {
+            document.list_form.action = action;
+            list_form.submit();
+        }
+    </script>
     <div class="table-responsive">
         <div id="sample-table-2_wrapper" class="dataTables_wrapper"
              role="grid">

@@ -9,17 +9,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script language="javascript">
-    jQuery(function ($) {
-        /* 时间选择 */
-        $('input[id=date-range-picker]').daterangepicker().prev().on(
-                ace.click_event, function () {
-                    $(this).next().focus();
-                });
-
-    });
-</script>
-
 <div class="widget-box collapsed">
     <div class="widget-header">
         <h5>搜索</h5>

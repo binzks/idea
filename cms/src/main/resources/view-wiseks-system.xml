@@ -54,7 +54,7 @@
                         <item name="主管审核通过" value="4"></item>
                     </items>
                 </column>
-                <column name="user_id" describe="修改人id" tag="dataItem">
+                <column name="user_id" describe="修改人" tag="dataItem">
                     <dataItem model="model_select_user" key="id" value="name"></dataItem>
                 </column>
                 <column name="modify_time" describe="修改时间" tag="datetime"></column>

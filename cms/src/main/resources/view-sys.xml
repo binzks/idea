@@ -6,9 +6,7 @@
                 <column name="id" describe="主键" tag="text" center="true"
                         width="0" display="false" add="false" edit="false"></column>
                 <column name="name" describe="模块名称" search="true" required="true"></column>
-                <column name="parent_name" describe="模块组" add="false" edit="false"></column>
-                <column name="parent_id" describe="模块组" tag="dataItem" search="true"
-                        display="false" detail="false" default="0">
+                <column name="parent_id" describe="模块组" tag="dataItem" search="true" default="0">
                     <dataItem model="model_sys_select_module_group" key="id"
                               value="name"></dataItem>
                 </column>
@@ -18,6 +16,10 @@
                         <item name="模块组" value="0"></item>
                         <item name="模块" value="1"></item>
                     </items>
+                </column>
+                <column name="workflow_id" describe="工作流" tag="dataItem" search="true" default="0">
+                    <dataItem model="model_select_workflow" key="id"
+                              value="name"></dataItem>
                 </column>
                 <column name="url" describe="URL"></column>
                 <column name="view_code" describe="View"></column>
@@ -165,8 +167,6 @@
                         default="0" display="false">
                     <dataItem model="model_sys_workflow_step" key="id" value="name"></dataItem>
                 </column>
-                <column name="parent_name" describe="工作流" add="false" edit="false"></column>
-                <column name="last_step_name" describe="上一步节点" add="false" edit="false"></column>
                 <column name="name" describe="节点名称" required="true"></column>
                 <column name="value" describe="字段值" required="true"></column>
                 <column name="user_names" describe="审核用户" add="false" edit="false"></column>

@@ -41,14 +41,14 @@ public class BaseController {
      * @param moduleId 模块id
      * @param request  请求
      * @return 返回登录用户对应的模块的权限，包括按钮、列、工作流等等
-     * @throws Exception
+     * @throws RuntimeException
      */
-    public ModulePermission getModulePermission(String moduleId, HttpServletRequest request) throws Exception {
+    public ModulePermission getModulePermission(String moduleId, HttpServletRequest request) throws RuntimeException {
         UserSession userSession = (UserSession) request.getSession().getAttribute("session_user");
         ModulePermission modulePermission = userSession.getModulePermission(moduleId);
         if (null == modulePermission) {
             logger.error("getModulePermission:模块[" + moduleId + "]不存在或者没有授权！");
-            throw new Exception("模块[" + moduleId + "]不存在或者没有授权，请联系管理员！");
+            throw new RuntimeException("模块[" + moduleId + "]不存在或者没有授权，请联系管理员！");
         }
         return modulePermission;
     }
