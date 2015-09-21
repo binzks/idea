@@ -31,7 +31,6 @@
     }
 
     function log(mid, id) {
-        alert("aaa");
         $.ajax({
             url: "/workflow/flow_log.do",
             data: {
@@ -43,16 +42,21 @@
             success: function (data) {
                 if (data && data.length != 0) {
                     var msg = "";
-                    var j = eval(data);
-                    alert(j);
-                    for (var i = 0; i < j.length; i++) {
-                        alert(j[i]);
-//                        msg += "<div>" + json[i].user_name + ""
-//
-//                        var unixTimestamp = new Date(unixtime* 1000);
+                    var jsonData = eval(data);
+                    for (var i = 0; i < jsonData.length; i++) {
+                        var t = new Date(parseInt(jsonData[i].create_time) * 1000).toLocaleString();
+                        var r = "审核通过";
+                        if (jsonData[i].result == "0") {
+                            r = "<span style=\"color:red\">审核不通过</span>";
+                        }
+                        msg += "<div>" + jsonData[i].user_name + " 在 " + t + "   " + r + "</div>";
+                        var m = jsonData[i].describe;
+                        if (m !== "") {
+                            msg += "<div>拒绝理由  <span style=\"color:red\">" + m + "</span></div>";
+                        }
                     }
                     bootbox.dialog({
-                        message: "<link href=\"assets/css/bootstrap.min.css\" rel=\"stylesheet\"> <div class=\"wizard-steps\"> <span class=\"step\">1</span><span class=\"title\">Validation states</span></div>",
+                        message: msg,
                         title: "审核日志",
                         buttons: {
                             CLOSE: {
