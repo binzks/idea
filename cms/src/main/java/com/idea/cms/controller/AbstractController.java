@@ -22,6 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public abstract class AbstractController extends BaseController {
 
@@ -96,10 +98,10 @@ public abstract class AbstractController extends BaseController {
     /**
      * 保存数据，如果id为空则新增，否则修改
      *
-     * @param mid      模块id
-     * @param id       数据id
-     * @param model    页面model
-     * @param request  客户端请求
+     * @param mid     模块id
+     * @param id      数据id
+     * @param model   页面model
+     * @param request 客户端请求
      * @return 页面地址
      */
     @RequestMapping(value = {"save{mid}{id}", "/save{mid}-{id}"}, method = RequestMethod.POST)
@@ -219,5 +221,6 @@ public abstract class AbstractController extends BaseController {
             return "/system/template/error";
         }
     }
+
 
 }

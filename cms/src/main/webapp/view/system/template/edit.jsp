@@ -31,13 +31,26 @@
                                 </c:forEach>
                             </select>
                         </c:when>
-                        <c:when test="${ column.tag.toString() == 'DATE' || column.tag.toString() == 'DATETIME' }">
+                        <c:when test="${ column.tag.toString() == 'DATE' }">
                             <div class="form-group">
                                 <div class="col-xs-4">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" id="datetime-picker"
-                                               name="${column.name }" readonly="readonly" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})
-                                               value="${data.get(column.name) }" placeholder="选择时间">
+                                        <input type="text" class="Wdate" name="${column.name }"
+                                               value="<date:date value="${data.get(column.name)*1000}" pattern="yyyy-MM-dd"/>"
+                                               onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})"
+                                               placeholder="选择日期">
+                                    </div>
+                                </div>
+                            </div>
+                        </c:when>
+                        <c:when test="${ column.tag.toString() == 'DATETIME' }">
+                            <div class="form-group">
+                                <div class="col-xs-4">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="Wdate" name="${column.name }"
+                                               value="<date:date value="${data.get(column.name)*1000}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+                                               onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true})"
+                                               placeholder="选择时间">
                                     </div>
                                 </div>
                             </div>

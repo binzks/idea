@@ -11,6 +11,3 @@
 
 <link rel="stylesheet" href="/assets/css/datepicker.css" />
 <link rel="stylesheet" href="/assets/css/daterangepicker.css" />
-
-
-		

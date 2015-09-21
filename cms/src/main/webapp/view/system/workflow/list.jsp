@@ -11,22 +11,13 @@
     <link rel="stylesheet" href="/assets/css/chosen.css"/>
 </head>
 <body>
-<form action="${baseUrl }/list${mid}.html" method="post" id="list_form"
-      name="list_form"></form>
 <script src="/js/bootbox.min.js"></script>
 <script type="text/javascript">
     function refuse(mid, id) {
         bootbox.prompt("请填写拒绝理由!", function (result) {
-            $.ajax({
-                url: "/workflow/refuse.do",
-                data: {
-                    "mid": mid,
-                    "id": id,
-                    "describe": result
-                },
-                type: "post",
-                dataType: "json"
-            });
+            if (result !== null) {
+                window.location.href = "/workflow/refuse" + mid + "-" + id + ".html?describe=" + result;
+            }
         });
     }
 
@@ -47,13 +38,9 @@
                         var t = new Date(parseInt(jsonData[i].create_time) * 1000).toLocaleString();
                         var r = "审核通过";
                         if (jsonData[i].result == "0") {
-                            r = "<span style=\"color:red\">审核不通过</span>";
+                            r = "<span style=\"color:red\">审核不通过</span><div>拒绝理由  <span style=\"color:red\">" + jsonData[i].describe + "</span></div>";
                         }
                         msg += "<div>" + jsonData[i].user_name + " 在 " + t + "   " + r + "</div>";
-                        var m = jsonData[i].describe;
-                        if (m !== "") {
-                            msg += "<div>拒绝理由  <span style=\"color:red\">" + m + "</span></div>";
-                        }
                     }
                     bootbox.dialog({
                         message: msg,

@@ -55,14 +55,15 @@ public class BaseController {
 
     /***
      * 初始化页面的查询条件，并将查询条件值填入model的search属性，供页面赋值
+     * 先判断如果model中没有列，则不过滤，如果列有行级过滤，则先加入行级过滤值，如果列有查询过滤，则加入查询过滤值，如果过滤值为空表示不过滤
      *
-     * @param model
-     * @param request
-     * @param viewColumns
-     * @param columns
-     * @param rowFilters
-     * @return
-     * @throws Exception
+     * @param model       页面model
+     * @param request     页面请求
+     * @param viewColumns view的列定义
+     * @param columns     view对应的model的列定义
+     * @param rowFilters  模块的行级过滤
+     * @return 返回过滤列表
+     * @throws Exception 字符串转时间异常
      */
     public List<Filter> initFilters(Model model, HttpServletRequest request, List<ViewColumn> viewColumns, Map<String, Column> columns, Map<String, String> rowFilters) throws Exception {
         Map<String, Object> searchMap = new HashMap<>();
@@ -83,6 +84,37 @@ public class BaseController {
                 }
                 filters.add(new Filter(column.getJoinName(), column.getName(), FilterType.In, rowValue));
             }
+            if (!viewColumn.isSearch()) {
+                continue;
+            }
+            // 如果是日期或者时间则特殊处理，取范围值，如果是text则取like，其他等于
+            if (ViewColumnTag.Date == viewColumn.getTag()) {
+                String begin = getParameterString(request, viewColumn.getName() + "_begin");
+                String end = getParameterString(request, viewColumn.getName() + "_end");
+                if (StringUtils.isNotBlank(begin) && StringUtils.isNotBlank(end)) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    filters.add(new Filter(column.getJoinName(), column.getName(), FilterType.Between,
+                            simpleDateFormat.parse(begin.trim() + " 00:00:00").getTime() / 1000 + "," + simpleDateFormat.parse(end.trim() + " 23:59:59").getTime() / 1000));
+                }
+            } else if (ViewColumnTag.DateTime == viewColumn.getTag()) {
+                String begin = getParameterString(request, viewColumn.getName() + "_begin");
+                String end = getParameterString(request, viewColumn.getName() + "_end");
+                if (StringUtils.isNotBlank(begin) && StringUtils.isNotBlank(end)) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    filters.add(new Filter(column.getJoinName(), column.getName(), FilterType.Between,
+                            simpleDateFormat.parse(begin).getTime() / 1000 + "," + simpleDateFormat.parse(end).getTime() / 1000));
+                }
+            } else {
+                String value = getParameterString(request, viewColumn.getName());
+                if (StringUtils.isNotBlank(value)) {
+                    if (ViewColumnTag.Text == viewColumn.getTag()) {
+                        filters.add(new Filter(column.getJoinName(), column.getName(), FilterType.Like, value));
+                    } else {
+                        filters.add(new Filter(column.getJoinName(), column.getName(), FilterType.Eq, value));
+                    }
+                }
+            }
+
             String value = request.getParameter(viewColumn.getName());
             if (StringUtils.isBlank(value)) {
                 continue;

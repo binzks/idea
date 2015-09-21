@@ -219,11 +219,9 @@ public class WorkFlowController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/refuse.do")
-    public String refuse(Model model, HttpServletRequest request) {
+    @RequestMapping(value = "/refuse{mid}-{id}")
+    public String refuse(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request) {
         try {
-            String mid = request.getParameter("mid");
-            String id = request.getParameter("id");
             String describe = request.getParameter("describe");
             ModulePermission modulePermission = getModulePermission(mid, request);
             UserSession userSession = (UserSession) request.getSession().getAttribute("session_user");

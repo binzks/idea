@@ -1,7 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib uri="/tags" prefix="date" %>
 
 <!DOCTYPE html>
 <html>
@@ -10,14 +8,14 @@
     <title>${title }列表</title>
 </head>
 <body>
-<form action="${baseUrl }/list${mid}.html" method="post" id="list_form"
-      name="list_form">
-    <script language="javascript">
-        function page(action) {
-            document.list_form.action = action;
-            list_form.submit();
-        }
-    </script>
+<%--<form action="${baseUrl }/list${mid}.html" method="post" id="list_form"--%>
+      <%--name="list_form">--%>
+    <%--<script language="javascript">--%>
+        <%--function page(action) {--%>
+            <%--document.list_form.action = action;--%>
+            <%--list_form.submit();--%>
+        <%--}--%>
+    <%--</script>--%>
     <div class="table-responsive">
         <div id="sample-table-2_wrapper" class="dataTables_wrapper"
              role="grid">
@@ -66,6 +64,6 @@
             <%@include file="/view/system/template/paging.jsp" %>
         </div>
     </div>
-</form>
+<%--</form>--%>
 </body>
 </html>

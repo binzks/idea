@@ -12,8 +12,7 @@
 <%@ taglib uri="/tags" prefix="date" %>
 
 <c:forEach var="column" items="${columns}">
-    <c:if
-            test="${column.display && empty powerColumns.get(column.name)}">
+    <c:if test="${column.display && empty powerColumns.get(column.name)}">
         <td <c:if test="${column.center }">class="center"</c:if>>
             <c:choose>
                 <c:when

@@ -28,7 +28,7 @@
                         <div class="profile-info-name">${column.describe }</div>
                         <div class="profile-info-value">
                             <date:date value="${data.get(column.name) *1000}"
-                                       pattern="yyyy-MM-dd hh:mm:ss"/>
+                                       pattern="yyyy-MM-dd HH:mm:ss"/>
                             &nbsp;
                         </div>
                     </div>
