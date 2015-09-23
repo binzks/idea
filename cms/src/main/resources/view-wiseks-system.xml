@@ -58,6 +58,7 @@
                     <dataItem model="model_select_user" key="id" value="name"></dataItem>
                 </column>
                 <column name="modify_time" describe="修改时间" tag="datetime" search="true"></column>
+                <column name="file_id" describe="zip文件" tag="file"></column>
             </columns>
             <actions>
                 <action name="detail" describe="模块详情" type="1" href="/tpl/detail"

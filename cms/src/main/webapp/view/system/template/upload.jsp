@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<script src="/iJs/dropzone.min.js"></script>
+<script src="/js/dropzone.min.js"></script>
 
 <form id="edit_form" class="form-horizontal" method="post" enctype="multipart/form-data"
       action="${baseUrl}/savePic${mid}-${id}.html">

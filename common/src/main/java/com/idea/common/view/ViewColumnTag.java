@@ -13,7 +13,8 @@ public enum ViewColumnTag {
     Image("IMAGE"),
     Item("ITEM"),
     DateItem("DATAITEM"),
-    Int("INT");
+    Int("INT"),
+    File("FILE");
 
     private String name;
 
@@ -30,7 +31,7 @@ public enum ViewColumnTag {
      * 根据字符串获取枚举值
      *
      * @param name 枚举值字符串
-     * @return
+     * @return tag类型
      */
     public static ViewColumnTag valueOfString(String name) {
         switch (name.toUpperCase()) {
@@ -50,6 +51,8 @@ public enum ViewColumnTag {
                 return ViewColumnTag.Image;
             case "PASSWORD":
                 return ViewColumnTag.Password;
+            case "FILE":
+                return ViewColumnTag.File;
             default:
                 throw new RuntimeException("不支持的数据库类型[" + name + "]");
         }

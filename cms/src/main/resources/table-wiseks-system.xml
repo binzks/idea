@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root type="table">
     <tables>
+        <table type="mysql" name="wiseks_sys_file" comment="附件" ds="wiseks" pk="id">
+            <fields>
+                <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
+                <field name="name" comment="附件名称" type="varchar" size="255"
+                       isnull="false"></field>
+                <field name="path" comment="原文件地址" type="varchar" size="255"></field>
+                <field name="compressed_path" comment="压缩文件地址" type="varchar" size="255"></field>
+            </fields>
+        </table>
         <table type="mysql" name="wiseks_sys_platform" comment="平台" ds="wiseks" pk="id">
             <fields>
                 <field name="id" comment="主键" type="int" size="11" isnull="false"></field>
@@ -38,6 +47,7 @@
                 <field name="user_id" comment="修改人id" type="int" size="11"
                        isnull="false"></field>
                 <field name="modify_time" comment="修改时间" type="varchar" size="20"></field>
+                <field name="file_id" comment="zip附件id" type="varchar" size="255"></field>
             </fields>
             <indexes>
                 <index name="index_name" type="UNIQUE" comment="名称唯一索引"

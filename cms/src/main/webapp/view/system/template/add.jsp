@@ -38,7 +38,8 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="Wdate" name="${column.name }"
                                                onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})"
-                                               placeholder="选择日期">
+                                               placeholder="选择日期"
+                                               <c:if test="${column.required }">required="required"</c:if> />
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +50,8 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="Wdate" name="${column.name }"
                                                onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true})"
-                                               placeholder="选择时间">
+                                               placeholder="选择时间"
+                                               <c:if test="${column.required }">required="required"</c:if> />
                                     </div>
                                 </div>
                             </div>
