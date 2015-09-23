@@ -25,7 +25,6 @@ import com.idea.framework.jdbc.support.model.Filter;
 import com.idea.framework.jdbc.support.model.FilterType;
 import com.idea.framework.jdbc.support.model.Order;
 import com.idea.framework.jdbc.support.model.OrderType;
-import com.sun.javafx.collections.MappingChange;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

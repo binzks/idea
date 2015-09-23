@@ -36,12 +36,10 @@ public class UserController extends AbstractController {
     private String rowValuePrefix = "@r@";
 
     @RequestMapping(value = "/chg_psw{mid}-{id}") // 密码修改
-    public String changePassword(@PathVariable String mid, @PathVariable String id, Model model,
-                                 HttpServletRequest request, HttpServletResponse response) {
+    public String changePassword(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
-            View view = modulePermission.getView();
-            List<Filter> filters = new ArrayList<Filter>();
+            List<Filter> filters = new ArrayList<>();
             filters.add(new Filter(modulePermission.getPkName(), FilterType.Eq, id));
             Map<String, Object> map = modulePermission.getJdbcModel().selectMap(filters);
             model.addAttribute("mid", mid);
@@ -52,7 +50,7 @@ public class UserController extends AbstractController {
             return "system/user/chgPsw";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -71,7 +69,7 @@ public class UserController extends AbstractController {
             return "redirect:" + baseUrl + "/list" + mid + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -80,7 +78,6 @@ public class UserController extends AbstractController {
                             HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
-            View view = modulePermission.getView();
             List<Filter> filters = new ArrayList<>();
             filters.add(new Filter(modulePermission.getPkName(), FilterType.Eq, id));
             Map<String, Object> map = modulePermission.getJdbcModel().selectMap(filters);
@@ -92,7 +89,7 @@ public class UserController extends AbstractController {
             return "system/user/rowFilter";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -110,7 +107,7 @@ public class UserController extends AbstractController {
                 String[] rowList = rowValChecked.split(",");
                 List<Map<String, Object>> list = new ArrayList<>();
                 String lastColumn = null;
-                StringBuffer values = new StringBuffer();
+                StringBuilder values = new StringBuilder();
                 for (int i = 0; i < rowList.length; i++) {
                     String row = rowList[i];
                     int moduleIndex = row.indexOf(modulePrefix);
@@ -141,7 +138,7 @@ public class UserController extends AbstractController {
             return "redirect:" + baseUrl + "/list" + mid + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -158,7 +155,7 @@ public class UserController extends AbstractController {
     public void getRowFilterTree(HttpServletRequest request, HttpServletResponse response) {
         // JSON树
         String userId = request.getParameter("id");
-        List<Filter> filters = new ArrayList<Filter>();
+        List<Filter> filters = new ArrayList<>();
         filters.add(new Filter("id", FilterType.Eq, userId));
         Map<String, Object> userMap = JdbcModelCache.getInstance().get("model_sys_user").selectMap(filters);
         filters.clear();
@@ -173,9 +170,9 @@ public class UserController extends AbstractController {
     /**
      * 根据用户的模块权限，生成模块权限对应的列的行级过滤树，只显示有行级过滤列的模块
      *
-     * @param userId
-     * @param moduleIds
-     * @return
+     * @param userId    登录用户id
+     * @param moduleIds 模块id
+     * @return 行级过滤树
      */
     private List<Map<String, Object>> initRowFilterTree(String userId, String moduleIds) {
         if (StringUtils.isBlank(moduleIds)) {
@@ -224,11 +221,11 @@ public class UserController extends AbstractController {
     /**
      * 获取行级过滤值是否需要选中
      *
-     * @param list
-     * @param value
-     * @param moduleId
-     * @param column
-     * @return
+     * @param list     待检查数据
+     * @param value    检查值
+     * @param moduleId 模块id
+     * @param column   model列
+     * @return 是否选中
      */
     private boolean getChecked(List<Map<String, Object>> list, String value, String moduleId, String column) {
         boolean result = false;
@@ -272,7 +269,7 @@ public class UserController extends AbstractController {
             return "/system/user/info";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 

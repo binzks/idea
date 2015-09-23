@@ -18,10 +18,7 @@ import com.idea.common.view.View;
 import com.idea.framework.jdbc.support.JdbcModel;
 import com.idea.framework.jdbc.support.model.Filter;
 import com.idea.framework.jdbc.support.model.FilterType;
-import com.idea.framework.jdbc.support.model.Order;
-import com.idea.framework.jdbc.support.model.OrderType;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +28,6 @@ import com.google.gson.Gson;
 @Controller
 @RequestMapping(value = "/workflow")
 public class WorkFlowController extends BaseController {
-
-    private Logger logger = Logger.getLogger(WorkFlowController.class);
 
     /***
      * 工作流列表页面
@@ -54,7 +49,7 @@ public class WorkFlowController extends BaseController {
             List<Filter> filters = initFilters(model, request, view.getColumns(), jdbcModel.getColumns(), modulePermission.getRowFilters());
             int totalCount = jdbcModel.getTotalCount(filters);
             // 初始化页面分页信息
-            Integer start = initPages(model, request, view, page, totalCount);
+            Integer start = initPages(model, view, page, totalCount);
             // 获取数据
             List<Map<String, Object>> dataList = modulePermission.getJdbcModel().selectMaps(filters, start, view.getRowSize());
             model.addAttribute("mid", mid);
@@ -245,8 +240,7 @@ public class WorkFlowController extends BaseController {
     }
 
     @RequestMapping(value = "/flow_log.do")
-    public void flowLog(Model model, HttpServletRequest request,
-                        HttpServletResponse response) {
+    public void flowLog(HttpServletRequest request, HttpServletResponse response) {
         String mid = request.getParameter("mid");
         String id = request.getParameter("id");
         ModulePermission modulePermission = getModulePermission(mid, request);

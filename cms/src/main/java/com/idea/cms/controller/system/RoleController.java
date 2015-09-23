@@ -39,7 +39,6 @@ public class RoleController extends AbstractController {
                                 HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
-            View view = modulePermission.getView();
             List<Filter> filters = new ArrayList<>();
             filters.add(new Filter(modulePermission.getPkName(), FilterType.Eq, id));
             Map<String, Object> map = modulePermission.getJdbcModel().selectMap(filters);
@@ -51,7 +50,7 @@ public class RoleController extends AbstractController {
             return "/system/role/empower";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -81,8 +80,8 @@ public class RoleController extends AbstractController {
             if (StringUtils.isNotBlank(columnUnChecked)) {
                 List<Map<String, Object>> roleColumns = new ArrayList<>();
                 String[] columns = columnUnChecked.split(",");
-                for (int i = 0; i < columns.length; i++) {
-                    String[] one = columns[i].split(columnPrefix);
+                for (String column : columns) {
+                    String[] one = column.split(columnPrefix);
                     if (one.length == 2) {
                         String moduleId = one[0];
                         if (StringUtils.contains(moduleIds, "," + moduleId + ",")) {
@@ -100,8 +99,8 @@ public class RoleController extends AbstractController {
             if (StringUtils.isNotBlank(actionUnChecked)) {
                 List<Map<String, Object>> roleActions = new ArrayList<>();
                 String[] actions = actionUnChecked.split(",");
-                for (int i = 0; i < actions.length; i++) {
-                    String[] one = actions[i].split(actionPrefix);
+                for (String action : actions) {
+                    String[] one = action.split(actionPrefix);
                     if (one.length == 2) {
                         String moduleId = one[0];
                         if (StringUtils.contains(moduleIds, "," + moduleId + ",")) {
@@ -119,7 +118,7 @@ public class RoleController extends AbstractController {
             return "redirect:" + baseUrl + "/list" + mid + ".html";
         } catch (Exception e) {
             model.addAttribute("msg", "错误[" + e + "]");
-            return "/system/error";
+            return "/system/template/error";
         }
     }
 
@@ -210,10 +209,10 @@ public class RoleController extends AbstractController {
     /**
      * 判断权限的列和按钮是否需要勾选，如果权限中有值表示没有权限，不要勾选
      *
-     * @param list
-     * @param value
-     * @param id
-     * @return
+     * @param list  待校验的数据
+     * @param value 检查值
+     * @param id    模块id
+     * @return 是否选中
      */
     private boolean getChecked(List<Map<String, Object>> list, String value, String id) {
         boolean result = true;

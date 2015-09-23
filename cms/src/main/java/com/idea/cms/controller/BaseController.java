@@ -19,7 +19,6 @@ import com.idea.common.view.View;
 import com.idea.common.view.ViewColumn;
 import com.idea.common.view.ViewColumnTag;
 import com.idea.common.view.ViewPage;
-import com.idea.framework.jdbc.support.JdbcModel;
 import com.idea.framework.jdbc.support.model.Column;
 import com.idea.framework.jdbc.support.model.Filter;
 import com.idea.framework.jdbc.support.model.FilterType;
@@ -68,8 +67,7 @@ public class BaseController {
     public List<Filter> initFilters(Model model, HttpServletRequest request, List<ViewColumn> viewColumns, Map<String, Column> columns, Map<String, String> rowFilters) throws Exception {
         Map<String, Object> searchMap = new HashMap<>();
         List<Filter> filters = new ArrayList<>();
-        for (int i = 0; i < viewColumns.size(); i++) {
-            ViewColumn viewColumn = viewColumns.get(i);
+        for (ViewColumn viewColumn : viewColumns) {
             Column column = columns.get(viewColumn.getName());
             if (null == column) {
                 continue;
@@ -139,13 +137,12 @@ public class BaseController {
     /**
      * 生成页面分页，并将分页填入model的pages属性，供页面使用
      *
-     * @param model
-     * @param request
-     * @param view
-     * @param page
+     * @param model   页面model
+     * @param view    模块view
+     * @param page    view分页
      * @return 返回页面起始的数据行数，供实际获取分页数据的时候使用的开始数据行
      */
-    public Integer initPages(Model model, HttpServletRequest request, View view, Integer page, Integer totalCount) {
+    public Integer initPages(Model model, View view, Integer page, Integer totalCount) {
         ViewPage viewPage = new ViewPage();
         viewPage.setCurrentPage(page);
         viewPage.setRowSize(view.getRowSize());

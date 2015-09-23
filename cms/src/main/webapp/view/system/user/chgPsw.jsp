@@ -8,7 +8,6 @@
 <title>修改密码</title>
 <script type="text/javascript">
 	function checkPassword() {
-		//alert(1);
 		var pw1 = document.getElementById("password").value;
 		var pw2 = document.getElementById("confirmpwd").value;
 		if (pw1 == "" || pw2 == "") {

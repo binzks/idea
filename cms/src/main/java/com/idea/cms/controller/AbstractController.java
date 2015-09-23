@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.idea.cms.support.ModulePermission;
 import com.idea.cms.support.UserSession;
-import com.idea.common.cache.JdbcModelCache;
 import com.idea.common.view.View;
 import com.idea.common.view.ViewColumn;
 import com.idea.framework.jdbc.support.JdbcModel;
@@ -22,8 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public abstract class AbstractController extends BaseController {
 
@@ -37,7 +33,7 @@ public abstract class AbstractController extends BaseController {
             List<Filter> filters = initFilters(model, request, view.getColumns(), jdbcModel.getColumns(), modulePermission.getRowFilters());
             int totalCount = jdbcModel.getTotalCount(filters);
             // 初始化页面分页信息
-            Integer start = initPages(model, request, view, page, totalCount);
+            Integer start = initPages(model, view, page, totalCount);
             // 获取数据
             List<Map<String, Object>> dataList = modulePermission.getJdbcModel().selectMaps(filters, start, view.getRowSize());
             int optWidth = view.getActions().size() * 23;
@@ -168,12 +164,10 @@ public abstract class AbstractController extends BaseController {
      * @param id       数据id
      * @param model    页面model
      * @param request  请求
-     * @param response 请求响应
      * @return 返回页面地址
      */
     @RequestMapping(value = "/detail{mid}-{id}")
-    public String detailData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
-                             HttpServletResponse response) {
+    public String detailData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
@@ -198,12 +192,10 @@ public abstract class AbstractController extends BaseController {
      * @param id       数据id
      * @param model    写入页面model
      * @param request  客户端请求
-     * @param response 客户端返回
      * @return 返回页面地址
      */
     @RequestMapping(value = "/del{mid}-{id}", method = RequestMethod.POST)
-    public String delData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request,
-                          HttpServletResponse response) {
+    public String delData(@PathVariable String mid, @PathVariable String id, Model model, HttpServletRequest request) {
         try {
             ModulePermission modulePermission = getModulePermission(mid, request);
             View view = modulePermission.getView();
